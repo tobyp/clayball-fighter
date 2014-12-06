@@ -23,6 +23,8 @@ public class Entity {
     protected boolean flipped;
     protected Animation animation;
 
+    protected int jumps = 0;
+
     public Entity(Char character, vec2 pos, int team, boolean flipped) {
         this.character = character;
         this.pos = pos;
@@ -37,40 +39,36 @@ public class Entity {
         Arena arena = state.getArena();
 
         pos = pos.add(vel.mul(delta));
-        if (pos.y < 0.f) {
+        if (pos.y > 0.f) { //Game is set in australia
             pos = pos.withY(0.f);
+            vel = vel.withY(0.f);
+            jumps = 0;
             onLand();
+        }else
+        if (pos.y < 0.f) {
+            vel = vel.add(new vec2(0, 0.1f));
         }
 
         if (pos.x < arena.getLeftBoundary()) {
-            pos = pos.withX(arena.getLeftBoundary()); //don't change state, we allow "running into the wall"
+            pos = pos.withX(arena.getLeftBoundary());
+            knockBack(-vel.x);
         }
         else if (pos.x > arena.getRightBoundary()) {
-            pos = pos.withX(arena.getRightBoundary()); //don't change state, we allow "running into the wall"
+            pos = pos.withX(arena.getRightBoundary());
+            knockBack(-vel.x);
         }
+    }
 
-        //test collision
-
-        /*float x_speed = 0; //Pixels per millisecond
-        float y_speed = 0; //Pixels per millisecond
-
-        if (controller.getJumping()) { //Regular jump. Cancel slide.
-            slide = 0;
-        }else
-        if (controller.getCrouching() && Math.abs(controller.getXSpeed()) == 1 && slide > 0) { //Slide
-            slide = 1500;
+    public void jump() {
+        if (jumps < 2) {
+            jumps++;
+            vel = vel.withY(-character.getJumpPower());
         }
+    }
 
-        if (slide > 0) {
-            x_speed = slide / 500;
-            slide = slide - delta;
-        }else{
-            x_speed = (controller.getXSpeed() * character.getSpeed()) / 1000;
-        }
-
-        //TODO: Gravity from jumping or being knocked back applied to y speed.
-
-        vel = new vec2(x_speed * delta, y_speed);*/
+    public void knockBack(float force) {
+        vel = vel.withX(force);
+        vel = vel.add(0, force/3);
     }
 
     public void onLand() {

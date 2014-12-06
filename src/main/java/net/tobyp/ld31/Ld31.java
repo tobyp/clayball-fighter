@@ -21,6 +21,7 @@ public class Ld31 extends StateBasedGame {
     StateFight fight;
 
     static final float ENTITY_SPEED = 2.f;
+    static final float ENTITY_JUMP_POWER = 2.7f;
     private SpriteSheet idle_gb;
     private SpriteSheet idle_us;
     private Image hub_gb;
@@ -45,8 +46,8 @@ public class Ld31 extends StateBasedGame {
         }
         Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f);
 
-        Char char_gb = new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED);
-        Char char_us = new Char("United States", idle_us, hub_us, ENTITY_SPEED);
+        Char char_gb = new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED, ENTITY_JUMP_POWER);
+        Char char_us = new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER);
 
         Entity p1 = new Entity(char_us, new vec2(-2.5f, 0f), 1, false);
         Entity p2 = new Entity(char_gb, new vec2(2.5f, 0f), 2, true);

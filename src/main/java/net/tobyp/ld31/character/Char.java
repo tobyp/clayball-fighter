@@ -16,13 +16,14 @@ public class Char {
     protected String name;
     protected SpriteSheet sprite_sheet;
     protected Image hub_image;
-    protected float speed;
+    protected float speed, jump_power;
 
-    public Char(String name, SpriteSheet sprite_sheet, Image hub_image, float speed) {
+    public Char(String name, SpriteSheet sprite_sheet, Image hub_image, float speed, float jump_power) {
         this.name = name;
         this.sprite_sheet = sprite_sheet;
         this.hub_image = hub_image;
         this.speed = speed;
+        this.jump_power = jump_power;
     }
 
     public String getName() {
@@ -48,5 +49,8 @@ public class Char {
 
     public float getSpeed() {
         return speed;
+    }
+    public float getJumpPower() {
+        return jump_power;
     }
 }
