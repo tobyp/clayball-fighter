@@ -49,6 +49,13 @@ public class StateFight extends BasicGameState implements InputListener {
         arena.applyTransform(graphics, gameContainer);
         //ARENA SPACE (1 unit is width of one country ball, origin is center ground)
 
+        graphics.drawLine(-10.f, arena.getGround(), 10.f, arena.getGround());
+        graphics.drawLine(0.f, -10.f, 0.f, 10.f);
+        graphics.drawLine(-10.f, arena.getGround(), 10.f, arena.getGround());
+        graphics.drawLine(arena.getLeftBoundary(), -10.f, arena.getLeftBoundary(), 10.f);
+        graphics.drawLine(-10.f, arena.getGround(), 10.f, arena.getGround());
+        graphics.drawLine(arena.getRightBoundary(), -10.f, arena.getRightBoundary(), 10.f);
+
         for (Entity e : entities) {
             e.render(graphics);
         }

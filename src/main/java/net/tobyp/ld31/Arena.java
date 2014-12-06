@@ -16,6 +16,15 @@ public class Arena {
     private float right_boundary; //right boundary, in units of balls, from the center (should be positive)
     private float ball_width; //width of whole image, in units of balls
     private float center; //0.0 is left, 1.0 is right of image
+
+    public float getGround() {
+        return ground;
+    }
+
+    public float getCenter() {
+        return center;
+    }
+
     private float ground; //0.0 is top, 1.0 is bottom of image
 
     public Arena(String name, Image bg, Image fg, Image preview, float ball_width, float ground, float center, float left_boundary, float right_boundary) {

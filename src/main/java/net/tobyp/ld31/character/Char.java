@@ -1,7 +1,7 @@
 package net.tobyp.ld31.character;
 
+import net.tobyp.ld31.Animation;
 import net.tobyp.ld31.ent.FighterState;
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -35,7 +35,7 @@ public class Char {
             case IDLE:
             case MOVE:
             default:
-                return new Animation(sprite_sheet, 250);
+                return new Animation(sprite_sheet, 0.2f, 1.f, 1.f, 128, 128);
         }
     }
 

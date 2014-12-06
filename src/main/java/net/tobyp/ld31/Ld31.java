@@ -32,13 +32,13 @@ public class Ld31 extends StateBasedGame {
         idle_us = new SpriteSheet("src/main/resources/us/idle.png", 256, 256);
         arena_us_bg = new Image("src/main/resources/us/arena.png");
 
-        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.9f, 0.5f, -4.f, 4.f);
+        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -4.f, 4.f);
 
         Char char_gb = new Char("United Kingdom", idle_gb, ENTITY_SPEED);
         Char char_us = new Char("United States", idle_us, ENTITY_SPEED);
 
-        Entity p1 = new Entity(char_us, new vec2(-2.5f, 0.5f), 1, false);
-        Entity p2 = new Entity(char_gb, new vec2(2.5f, 0.5f), 2, true);
+        Entity p1 = new Entity(char_us, new vec2(-2.5f, 0f), 1, false);
+        Entity p2 = new Entity(char_gb, new vec2(2.5f, 0f), 2, true);
 
         fight = new StateFight(arena, p1, p2);
         addState(fight);
