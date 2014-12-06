@@ -43,7 +43,7 @@ public class Char {
             case IDLE:
             case MOVE:
             default:
-                return new Animation(sprite_sheet, 0.15f, 1.f, 1.f, 128, 128);
+                return new Animation(sprite_sheet, 0.15f, 1.5f, 1.5f, 128, 128);
         }
     }
 
