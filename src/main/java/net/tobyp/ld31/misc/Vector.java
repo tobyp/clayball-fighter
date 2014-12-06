@@ -28,6 +28,11 @@ public class Vector {
         this.y = y;
     }
 
+    public void add(float x, float y) {
+        this.x -= x;
+        this.y -= y;
+    }
+
 
     public float getX() {
         return x;
@@ -35,11 +40,6 @@ public class Vector {
 
     public float getY() {
         return y;
-    }
-
-
-    public Vector sub(Vector compare) {
-        return new Vector(x - compare.getX(), y - compare.getY());
     }
 
 

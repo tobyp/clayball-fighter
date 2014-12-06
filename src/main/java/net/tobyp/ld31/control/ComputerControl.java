@@ -1,34 +1,46 @@
 package net.tobyp.ld31.control;
 
+import net.tobyp.ld31.ent.LivingEntity;
 import org.newdawn.slick.Input;
+
+import java.util.List;
 
 /**
  * @author Tom
  * Speed is currently being defined as Pixels per Millisecond. Can be modified mathmatically by entity classes.
  */
 public class ComputerControl extends ControlMethod {
-    private int key_left, key_right, key_jump, key_crouch;
+    private List<LivingEntity> targets;
+    private LivingEntity current_target;
 
-    public ComputerControl(Input input, int key_left, int key_right, int key_jump, int key_crouch) {
+    public ComputerControl(Input input, List<LivingEntity> targets) {
         super(input);
-        this.key_left = key_left;
-        this.key_right = key_right;
-        this.key_jump = key_jump;
-        this.key_crouch = key_crouch;
+        this.targets = targets;
     }
 
     @Override
     public float getXSpeed() {
-        return (input.isKeyDown(key_right) ? 1 : 0) - (input.isKeyDown(key_left) ? 1 : 0);
+        return 0;
     }
 
     @Override
     public boolean getJumping() {
-        return input.isKeyDown(key_jump);
+        return false;
     }
 
     @Override
     public boolean getCrouching() {
-        return input.isKeyDown(key_crouch);
+        return false;
+    }
+
+    @Override
+    public boolean getAttacking() {
+        return false;
+    }
+
+    private void selectTarget() {
+        if (this.current_target.getHealth() <= 0) {
+
+        }
     }
 }

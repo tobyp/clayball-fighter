@@ -15,7 +15,6 @@ public class Ld31 extends BasicGame implements InputListener {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
-
     }
 
     @Override

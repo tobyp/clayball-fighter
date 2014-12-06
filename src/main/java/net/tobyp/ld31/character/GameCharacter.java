@@ -4,11 +4,10 @@ import org.newdawn.slick.SpriteSheet;
 
 /**
  * @author Tom
- * Should define the unique characteristics of all possible characters.
- *  - Speed
- *  - Catchphrases
+ * Contains the unique characteristics of a playable character/countryball.
+ *  - Speed (1 is pixels per millisecond)
  *  - Spritesheet
- * (May be a good idea to do this as a class instead of an enum, thinking about it.)
+ *  - Catchphrases (?)
  */
 public class GameCharacter {
     protected String name;
