@@ -26,9 +26,13 @@ public class StateFight extends BasicGameState implements InputListener {
     private ControlManager control_manager;
 
     private SpriteSheet health;
+    private SpriteSheet hub_eyes;
 
     private static final float LEFT_HEALTH_BASE = 142;
     private static final float RIGHT_HEALTH_BASE = 142+448+100;
+
+    private static final float HAPPY_THRESH = 0.7f;
+    private static final float SAD_THRESH = 0.4f;
 
     public StateFight(Arena arena, Entity left, Entity right) {
         this.arena = arena;
@@ -46,6 +50,7 @@ public class StateFight extends BasicGameState implements InputListener {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         try {
             health = new SpriteSheet(Ld31.class.getResource("/health.png"), 448, 79);
+            hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,6 +86,18 @@ public class StateFight extends BasicGameState implements InputListener {
 
         graphics.drawImage(health.getSprite(0, 1), 142, 20);
         graphics.drawImage(left.getCharacter().getHubImage(), 0, 0);
+        if (left.getHealth() >= HAPPY_THRESH) {
+            graphics.drawImage(hub_eyes.getSubImage(1,0), 0, 0);
+        }
+        else if (left.getHealth() >= SAD_THRESH) {
+            graphics.drawImage(hub_eyes.getSubImage(0,0), 0, 0);
+        }
+        else if (left.getHealth() > 0.f) {
+            graphics.drawImage(hub_eyes.getSubImage(2,0), 0, 0);
+        }
+        else {
+            graphics.drawImage(hub_eyes.getSubImage(3,0), 0, 0);
+        }
         int lhw = (int)((448-19-14)*(left.getHealth())); //actual width of red, the 19/14 are the left/right margins
         graphics.drawImage(health.getSprite(0, 0),
                 LEFT_HEALTH_BASE+(448-14)-lhw, 20,
@@ -89,6 +106,18 @@ public class StateFight extends BasicGameState implements InputListener {
                 (448-14), 79);
         graphics.drawImage(health.getSprite(0, 3), 142+448+100, 20);
         graphics.drawImage(right.getCharacter().getHubImage(), 1280-150, 0);
+        if (right.getHealth() >= HAPPY_THRESH) {
+            graphics.drawImage(hub_eyes.getSubImage(1,0), 1280-150, 0);
+        }
+        else if (right.getHealth() >= SAD_THRESH) {
+            graphics.drawImage(hub_eyes.getSubImage(0,0), 1280-150, 0);
+        }
+        else if (right.getHealth() > 0.f) {
+            graphics.drawImage(hub_eyes.getSubImage(2,0), 1280-150, 0);
+        }
+        else {
+            graphics.drawImage(hub_eyes.getSubImage(3,0), 1280-150, 0);
+        }
         int rhw = (int)((448-24-28)*(right.getHealth())); //actual width of red, the 24/28 are the left/right margins
         //Health Bars here
         graphics.drawImage(health.getSprite(0, 2),
