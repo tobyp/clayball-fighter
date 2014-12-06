@@ -86,7 +86,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.jumppixel.dichotomy.Dichotomy</mainClass>
+                    <mainClass>net.tobyp.ld31.Ld31</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -118,7 +118,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.jumppixel.dichotomy.Dichotomy</mainClass>
+                            <mainClass>net.tobyp.ld31.Ld31</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

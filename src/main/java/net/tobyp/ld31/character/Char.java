@@ -26,8 +26,17 @@ public class Char {
         return name;
     }
 
+    public SpriteSheet getSpriteSheet() {
+        return sprite_sheet;
+    }
+
     public Animation getAnimation(FighterState state) {
-       return null;
+        switch (state) {
+            case IDLE:
+            case MOVE:
+            default:
+                return new Animation(sprite_sheet, 250);
+        }
     }
 
     public float getSpeed() {

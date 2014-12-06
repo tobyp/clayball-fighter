@@ -7,7 +7,7 @@ import org.newdawn.slick.InputListener;
 /**
  * Created by Tom on 06/12/2014.
  */
-public abstract class ControlMethod implements InputListener {
+public class ControlMethod implements InputListener {
     protected Entity entity;
 
     public ControlMethod(Entity entity) {
@@ -111,7 +111,7 @@ public abstract class ControlMethod implements InputListener {
 
     @Override
     public boolean isAcceptingInput() {
-        return false;
+        return true;
     }
 
     @Override

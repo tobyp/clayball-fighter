@@ -25,18 +25,13 @@ public class KeyboardControl extends ControlMethod {
 
     @Override
     public void keyPressed(int i, char c) {
-        if (i == key_left) {
-            if (i == key_left && entity.getState().canMove()) {
+        if (i == key_left && entity.getState().canMove()) {
                 entity.changeVel(vec2.LEFT.mul(entity.getCharacter().getSpeed()));
                 entity.setState(entity.getVel().isZero() ? FighterState.IDLE : FighterState.MOVE);
-            }
-            else if (i == key_right && entity.getState().canMove()) {
-                entity.changeVel(vec2.RIGHT.mul(entity.getCharacter().getSpeed()));
-                entity.setState(entity.getVel().isZero() ? FighterState.IDLE : FighterState.MOVE);
-            }
         }
-        else if (i == key_right) {
-
+        else if (i == key_right && entity.getState().canMove()) {
+            entity.changeVel(vec2.RIGHT.mul(entity.getCharacter().getSpeed()));
+            entity.setState(entity.getVel().isZero() ? FighterState.IDLE : FighterState.MOVE);
         }
     }
 

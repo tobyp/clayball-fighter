@@ -4,8 +4,11 @@ import net.tobyp.ld31.Arena;
 import net.tobyp.ld31.StateFight;
 import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.misc.vec2;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 /**
  * @author Tom
@@ -32,7 +35,7 @@ public class Entity {
 
         Arena arena = state.getArena();
 
-        pos.add(vel.mul(delta));
+        pos = pos.add(vel.mul(delta));
         if (pos.y <= 0.f) {
             pos = pos.withY(0.f);
             onLand();
@@ -74,12 +77,14 @@ public class Entity {
     }
 
     public void render(Graphics graphics) {
-        graphics.pushTransform();
+        //graphics.pushTransform();
         if (flipped) {
-            graphics.scale(-1.f, 1.f);
+            //graphics.scale(-1.f, 1.f);
         }
-        graphics.drawAnimation(animation, pos.x, pos.y);
-        graphics.popTransform();
+        //graphics.drawAnimation(animation, pos.x-0.5f, pos.y-0.5f);
+        //graphics.popTransform();
+        //graphics.drawImage(character.getSpriteSheet().getSubImage(0, 0, 256, 256), 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 256.f, 256.f);
+        graphics.drawRect(0.f-0.5f, 0.f-1.f, 1.f, 1.f);
     }
 
     public void changeVel(vec2 vel) {

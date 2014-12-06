@@ -16,38 +16,42 @@ import java.util.logging.Logger;
 public class Ld31 extends StateBasedGame {
     StateFight fight;
 
-    static final float ENTITY_SPEED = 0.2f;
-    private SpriteSheet sprites_uk;
-    private SpriteSheet sprites_us;
+    static final float ENTITY_SPEED = 1.8f;
+    private SpriteSheet idle_gb;
+    private SpriteSheet idle_us;
+    private Image arena_us_bg;
 
-    public Ld31(String title) {
+    public Ld31(String title) throws SlickException {
         super(title);
-        sprites_uk = new SpriteSheet((Image)null, 256, 256);
-        sprites_us = new SpriteSheet((Image)null, 256, 256);
+
     }
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
-        Arena arena = new Arena();
+        idle_gb = new SpriteSheet("src/main/resources/gb/idle.png", 256, 256);
+        idle_us = new SpriteSheet("src/main/resources/us/idle.png", 256, 256);
+        arena_us_bg = new Image("src/main/resources/us/arena.png");
 
-        Char char_uk = new Char("United Kingdom", sprites_uk, ENTITY_SPEED);
-        Char char_us = new Char("United States", sprites_us, ENTITY_SPEED);
+        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.9f, 0.5f, -4.f, 4.f);
 
-        Entity p1 = new Entity(char_us, new vec2(-2.f, 0.5f), 1, false);
-        Entity p2 = new Entity(char_uk, new vec2(2.f, 0.5f), 2, true);
+        Char char_gb = new Char("United Kingdom", idle_gb, ENTITY_SPEED);
+        Char char_us = new Char("United States", idle_us, ENTITY_SPEED);
 
-        KeyboardControl p1_control = new KeyboardControl(p1, Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LSHIFT, Input.KEY_LCONTROL);
-        KeyboardControl p2_control = new KeyboardControl(p2, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RSHIFT, Input.KEY_RCONTROL);
+        Entity p1 = new Entity(char_us, new vec2(-2.5f, 0.5f), 1, false);
+        Entity p2 = new Entity(char_gb, new vec2(2.5f, 0.5f), 2, true);
 
         fight = new StateFight(arena, p1, p2);
         addState(fight);
+        enterState(fight.getID());
     }
 
     public static void main(String[] args) {
         Logger logger = Logger.getGlobal();
         try {
-            AppGameContainer c = new AppGameContainer(new ScalableGame(new Ld31("Ludum Dare 31"), 800, 600));
-            c.setDisplayMode(800, 600, false);
+            AppGameContainer c = new AppGameContainer(new Ld31("Ludum Dare 31"));
+            c.setDisplayMode(1280, 720, false);
+            //c.setTargetFrameRate(60);
+            c.setVSync(true);
             c.setShowFPS(false);
             //c.setIcon("src/main/resources/icon/icon.png");
             c.start();

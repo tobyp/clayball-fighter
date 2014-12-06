@@ -1,6 +1,7 @@
 package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.ControlMethod;
+import net.tobyp.ld31.control.KeyboardControl;
 import net.tobyp.ld31.ent.Entity;
 import org.apache.commons.lang.ArrayUtils;
 import org.newdawn.slick.*;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by tobyp on 12/6/14.
  */
-public class StateFight extends BasicGameState {
+public class StateFight extends BasicGameState implements InputListener {
     private Arena arena;
     private List<Entity> entities;
 
@@ -32,7 +33,11 @@ public class StateFight extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
+        KeyboardControl p1_control = new KeyboardControl(entities.get(0), Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LSHIFT, Input.KEY_LCONTROL);
+        KeyboardControl p2_control = new KeyboardControl(entities.get(1), Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RSHIFT, Input.KEY_RCONTROL);
 
+        gameContainer.getInput().addListener(p1_control);
+        gameContainer.getInput().addListener(p2_control);
     }
 
     @Override
@@ -40,14 +45,23 @@ public class StateFight extends BasicGameState {
         Image bg = arena.getBackground();
         graphics.drawImage(bg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, bg.getWidth(), bg.getHeight());
 
+        graphics.pushTransform();
+        arena.applyTransform(graphics, gameContainer);
+        //ARENA SPACE (1 unit is width of one country ball, origin is center ground)
+
         for (Entity e : entities) {
             e.render(graphics);
         }
 
+        graphics.popTransform();
+        //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
+
         //Health Bars here
 
-        Image fg = arena.getBackground();
-        graphics.drawImage(fg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, fg.getWidth(), fg.getHeight());
+        Image fg = arena.getForeground();
+        if (fg != null) {
+            graphics.drawImage(fg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, fg.getWidth(), fg.getHeight());
+        }
     }
 
     @Override
@@ -81,5 +95,10 @@ public class StateFight extends BasicGameState {
 
     public void setEntities(List<Entity> entities) {
         this.entities = entities;
+    }
+
+    @Override
+    public boolean isAcceptingInput() {
+        return false;
     }
 }
