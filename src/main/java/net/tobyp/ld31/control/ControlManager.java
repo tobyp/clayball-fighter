@@ -1,6 +1,7 @@
 package net.tobyp.ld31.control;
 
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.FighterState;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
@@ -23,11 +24,20 @@ public class ControlManager {
             Entity ent = pair.getKey();
             ControlMethod controller = pair.getValue();
 
+            if (controller.getHorizontalDirection() == 0 && Math.abs(ent.getVel().x) < 0.05) {
+                ent.changeVel(new vec2(-ent.getVel().x, 0));
+            }else
             if (ent.getVel().x < controller.getHorizontalDirection() * ent.getCharacter().getSpeed()) {
-                ent.changeVel(new vec2((ent.getCharacter().getSpeed() / 1000) * i, 0));
+                ent.changeVel(new vec2(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 500) * i, 0));
             }else
             if (ent.getVel().x > controller.getHorizontalDirection() * ent.getCharacter().getSpeed()) {
-                ent.changeVel(new vec2(-((ent.getCharacter().getSpeed() / 1000) * i), 0));
+                ent.changeVel(new vec2(-(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 500) * i), 0));
+            }
+
+            if (controller.getHorizontalDirection() != 0) {
+                ent.setState(FighterState.MOVE);
+            }else{
+                ent.setState(FighterState.IDLE);
             }
         }
     }
