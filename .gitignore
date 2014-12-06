@@ -18,4 +18,4 @@ hs_err*.log
 *.iws
 *.iml
 *.ipr
-.idea/
+.idea
