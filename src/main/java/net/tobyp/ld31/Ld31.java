@@ -5,8 +5,12 @@ import net.tobyp.ld31.control.KeyboardControl;
 import net.tobyp.ld31.ent.Entity;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
+import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.BufferedImageUtil;
 
+import javax.imageio.ImageIO;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,10 +32,13 @@ public class Ld31 extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
-        idle_gb = new SpriteSheet("src/main/resources/gb/idle.png", 256, 256);
-        idle_us = new SpriteSheet("src/main/resources/us/idle.png", 256, 256);
-        arena_us_bg = new Image("src/main/resources/us/arena.png");
+        try {
+            idle_gb = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
+            idle_us = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
+            arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
+        } catch (IOException e) {
 
+        }
         Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -4.f, 4.f);
 
         Char char_gb = new Char("United Kingdom", idle_gb, ENTITY_SPEED);
