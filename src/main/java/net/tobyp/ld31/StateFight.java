@@ -1,5 +1,6 @@
 package net.tobyp.ld31;
 
+import net.tobyp.ld31.control.ControlManager;
 import net.tobyp.ld31.control.ControlMethod;
 import net.tobyp.ld31.control.KeyboardControl;
 import net.tobyp.ld31.ent.Entity;
@@ -20,10 +21,12 @@ import java.util.List;
 public class StateFight extends BasicGameState implements InputListener {
     private Arena arena;
     private List<Entity> entities;
+    private ControlManager control_manager;
 
     public StateFight(Arena arena, Entity... entities) {
         this.arena = arena;
         this.entities = Arrays.asList(entities);
+        this.control_manager = new ControlManager();
     }
 
     @Override
@@ -33,11 +36,11 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        KeyboardControl p1_control = new KeyboardControl(entities.get(0), Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LSHIFT, Input.KEY_LCONTROL);
-        KeyboardControl p2_control = new KeyboardControl(entities.get(1), Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RSHIFT, Input.KEY_RCONTROL);
+        KeyboardControl p1_control = new KeyboardControl(gameContainer.getInput(), Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LSHIFT, Input.KEY_LCONTROL);
+        KeyboardControl p2_control = new KeyboardControl(gameContainer.getInput(), Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RSHIFT, Input.KEY_RCONTROL);
+        control_manager.register(entities.get(0), p1_control);
+        control_manager.register(entities.get(1), p2_control);
 
-        gameContainer.getInput().addListener(p1_control);
-        gameContainer.getInput().addListener(p2_control);
     }
 
     @Override
@@ -73,6 +76,7 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
+        control_manager.update(gameContainer, stateBasedGame, i);
 
         for (Entity e : entities) {
             e.update((float)i/1000.f, this);
