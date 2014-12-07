@@ -26,7 +26,6 @@ public class KeyboardEntityController implements KeyListener {
 
 
     public void update(float delta) {
-        System.out.println("Entity: "+direction+" "+entity.getVel());
         if (direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) {
             entity.changeVel(new vec2(-entity.getVel().x, 0.f));
         }else

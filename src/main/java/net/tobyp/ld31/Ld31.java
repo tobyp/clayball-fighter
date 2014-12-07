@@ -19,11 +19,6 @@ public class Ld31 extends StateBasedGame {
 
     static final float ENTITY_SPEED = 4.f;
     static final float ENTITY_JUMP_POWER = 6f;
-    private SpriteSheet idle_gb;
-    private SpriteSheet idle_us;
-    private Image hub_gb;
-    private Image hub_us;
-    private Image arena_us_bg;
 
     public Ld31(String title) throws SlickException {
         super(title);
@@ -32,14 +27,25 @@ public class Ld31 extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
+        SpriteSheet idle_gb;
+        SpriteSheet idle_us;
+        SpriteSheet idle_se;
+        Image hub_gb;
+        Image hub_us;
+        Image hub_se;
+        Image arena_us_bg;
+
         try {
             idle_gb = new SpriteSheet(Ld31.class.getResource("/gb/idle.png"), 256, 256);
             idle_us = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
+            idle_se = new SpriteSheet(Ld31.class.getResource("/se/idle.png"), 256, 256);
             hub_gb = new Image(Ld31.class.getResourceAsStream("/gb/hub.png"), "gb_hub", false);
             hub_us = new Image(Ld31.class.getResourceAsStream("/us/hub.png"), "us_hub", false);
+            hub_se = new Image(Ld31.class.getResourceAsStream("/se/hub.png"), "se_hub", false);
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
         } catch (IOException e) {
-
+            e.printStackTrace();
+            throw new SlickException(e.getMessage(), e);
         }
 
         Arena[] arenae = new Arena[]{
@@ -48,7 +54,8 @@ public class Ld31 extends StateBasedGame {
 
         Char[] characters = new Char[]{
                 new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED, ENTITY_JUMP_POWER),
-                new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER)
+                new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER),
+                new Char("Sweden", idle_se, hub_se, ENTITY_SPEED, ENTITY_JUMP_POWER)
         };
 
         StateFight fight = new StateFight();
