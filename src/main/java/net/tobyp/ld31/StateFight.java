@@ -2,6 +2,7 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -54,14 +55,8 @@ public class StateFight extends BasicGameState implements InputListener {
         //Collisions
         if (Math.abs(right.getPos().x - left.getPos().x) < 1.f) {
             if (Math.abs(right.getPos().y - left.getPos().y) < 0.5f) {
-                left.knockBack(left.getPos().x - right.getPos().x, Math.abs(right.getPos().y - left.getPos().y));
-                right.knockBack(right.getPos().x - left.getPos().x, Math.abs(left.getPos().y - right.getPos().y));
-            }
-        }
-
-        //Target selection
-        if (Math.abs(right.getPos().x - left.getPos().x) < 1.3f) {
-            if (Math.abs(right.getPos().y - left.getPos().y) < 0.5f) {
+                left.knockBack(left.getPos().x - right.getPos().x, 0);
+                right.knockBack(right.getPos().x - left.getPos().x, 0);
             }
         }
     }

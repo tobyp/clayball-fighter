@@ -40,9 +40,9 @@ public class Animation {
         accum = accum % delay;
     }
 
-    public void draw(Graphics g, float cx, float cy) {
+    public void draw(Graphics g, float cx, float cy, boolean flipped) {
         float top_left_x = cx - this.center_x;
         float top_left_y = cy - this.center_y;
-        g.drawImage(images[current_frame], top_left_x, top_left_y, top_left_x + width, top_left_y + height, 0, 0, tex_w, tex_h);
+        g.drawImage(images[current_frame].getFlippedCopy(flipped, false), top_left_x, top_left_y, top_left_x + width, top_left_y + height, 0, 0, tex_w, tex_h);
     }
 }
