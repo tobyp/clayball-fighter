@@ -95,8 +95,13 @@ public class StateOutro extends BasicGameState {
     }
 
     @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+        time = 0.f;
+    }
+
+    @Override
     public void keyPressed(int key, char c) {
-        //any key skips
-        time = OUTRO_TIME;
+        //esc key skips
+        if (key == Input.KEY_ESCAPE) time = OUTRO_TIME;
     }
 }
