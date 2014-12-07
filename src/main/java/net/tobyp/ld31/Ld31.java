@@ -1,15 +1,12 @@
 package net.tobyp.ld31;
 
 import net.tobyp.ld31.character.Char;
-import net.tobyp.ld31.control.KeyboardControl;
 import net.tobyp.ld31.ent.Entity;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.BufferedImageUtil;
 
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

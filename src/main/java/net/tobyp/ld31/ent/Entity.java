@@ -5,15 +5,13 @@ import net.tobyp.ld31.Arena;
 import net.tobyp.ld31.StateFight;
 import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.misc.vec2;
-import org.lwjgl.Sys;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 
 /**
  * @author Tom
  */
 public class Entity {
+    protected StateFight fight;
     protected vec2 pos; //defined such that y=0 is the baseline (center of a ball when it's touching the ground), x=0 is the center, and the unit is round about the diameter of a polandball
     protected vec2 vel = new vec2(0.f, 0.f);
     protected Char character;
@@ -24,8 +22,10 @@ public class Entity {
     protected Animation animation;
 
     protected int jumps = 0;
+    protected Entity target = null;
 
-    public Entity(Char character, vec2 pos, int team, boolean flipped) {
+
+    public Entity( Char character, vec2 pos, int team, boolean flipped) {
         this.character = character;
         this.pos = pos;
         this.team = team;
@@ -51,12 +51,27 @@ public class Entity {
 
         if (pos.x < arena.getLeftBoundary()) {
             pos = pos.withX(arena.getLeftBoundary());
-            knockBack(-vel.x);
+            knockBack(-vel.x, 0);
         }
         else if (pos.x > arena.getRightBoundary()) {
             pos = pos.withX(arena.getRightBoundary());
-            knockBack(-vel.x);
+            knockBack(-vel.x, 0);
         }
+
+        if (vel.x > 0) {
+            flipped = false;
+        }else
+        if (vel.x < 0) {
+            flipped = true;
+        }
+    }
+
+    public void setFight(StateFight fight) {
+        this.fight = fight;
+    }
+
+    public void setTarget(Entity entity) {
+        this.target = entity;
     }
 
     public void jump() {
@@ -66,9 +81,9 @@ public class Entity {
         }
     }
 
-    public void knockBack(float force) {
-        vel = vel.withX(force);
-        vel = vel.add(0, force/3);
+    public void knockBack(float x, float y) {
+        vel = vel.withX(x);
+        vel = vel.add(0, x / 3 + y);
     }
 
     public void onLand() {
