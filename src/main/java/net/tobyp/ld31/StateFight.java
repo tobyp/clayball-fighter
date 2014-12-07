@@ -30,11 +30,8 @@ public class StateFight extends BasicGameState implements InputListener {
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
 
-    private Entity displ_special_ent = null;
-    private String displ_special_text = "";
-    private float displ_special_time = 0;
-
     private float game_time;
+    private float display_time = 6;
 
     public StateFight() {
 
@@ -72,35 +69,46 @@ public class StateFight extends BasicGameState implements InputListener {
             }
         }
 
-        if (displ_special_time > 0) {
-            displ_special_time -= delta;
-        }else{
-            displ_special_time = 0;
-        }
-
         game_time += delta;
+        display_time = Math.max(0, display_time - delta);
+
+        if (game_time > 3 && left.locked && right.locked) {
+            left.locked = false;
+            right.locked = false;
+        }
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         graphics.setColor(new Color(1, 1, 1, 1));
 
-        if (game_time < 2) {
+        if (display_time > 0) {
             float scaleup = 2;
+
+            Color win_color = new Color(0.5f, 0.5f, 0.5f, 1f);
+            Color default_color = new Color(0.f, 0.f, 0.5f, 1f);
+
+            special_lights.setImageColor(1, 1, 1, 0.5f);
 
             Image flagl = left.getCharacter().getFlag().copy();
             Image flagr = right.getCharacter().getFlag().copy();
-            graphics.drawImage(flagl, 0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), gameContainer.getWidth()/2 - game_time*250, 0, gameContainer.getWidth() - game_time*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 0.2f));
-            graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((2-game_time) * 500), 0);
+            graphics.drawImage(flagl, 0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), gameContainer.getWidth()/2 - (6-display_time)*250, 0, gameContainer.getWidth() - (6-display_time)*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 1f));
+            graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round(((6-display_time)) * 500), 0);
+            graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round(((6-display_time)) * 300), 0);
             Image profile = left.getCharacter().getProfileImage();
-            profile.draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - game_time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            hub_eyes.getSprite(0, 0).draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - game_time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            profile.draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            hub_eyes.getSprite(0, 0).draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            Image identity = identities.getSprite(0, 0);
+            identity.draw(gameContainer.getWidth()/4 - identity.getWidth()/2 + (6-display_time)*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
 
-            graphics.drawImage(flagr, gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), game_time*250, 0, gameContainer.getWidth()/2 + game_time*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 0.2f));
-            graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((game_time) * 500), 0);
+            graphics.drawImage(flagr.getFlippedCopy(true, false), gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), (6-display_time)*250, 0, gameContainer.getWidth()/2 + (6-display_time)*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 1f));
+            graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round(((6-display_time)) * 500), 0);
+            graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round(((6-display_time)) * 300), 0);
             profile = right.getCharacter().getProfileImage();
-            profile.getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + game_time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            hub_eyes.getSprite(0, 0).getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + game_time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            profile.getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            hub_eyes.getSprite(0, 0).getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
+            identity = identities.getSprite(0, 1);
+            identity.draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - identity.getWidth()/2 - (6-display_time)*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
 
             graphics.drawImage(divider, gameContainer.getWidth()/2-divider.getWidth()/2, 0);
             return;
@@ -172,11 +180,6 @@ public class StateFight extends BasicGameState implements InputListener {
         Image fg = arena.getForeground();
         if (fg != null) {
             graphics.drawImage(fg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, fg.getWidth(), fg.getHeight());
-        }
-
-        if (game_time < 2.5f) {
-            graphics.setColor(new Color(1, 1, 1, 1-(game_time - 2) * 2));
-            graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight());
         }
 
     }

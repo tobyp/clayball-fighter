@@ -8,7 +8,7 @@ import org.newdawn.slick.SpriteSheet;
  * Created by tobyp on 12/6/14.
  */
 public class Animation {
-    Image[] images;
+    Image[] loop;
     int current_frame;
     float delay;
     float accum = 0.f;
@@ -24,25 +24,25 @@ public class Animation {
         this.delay = delay;
         this.width = width;
         this.height = height;
-        images = new Image[sheet.getVerticalCount()];
+        loop = new Image[sheet.getVerticalCount()];
         for (int i=0; i<sheet.getVerticalCount(); i++) {
-            images[i]=sheet.getSprite(0, i);
+            loop[i]=sheet.getSprite(0, i);
         }
-        this.tex_w = images[0].getWidth();
-        this.tex_h = images[0].getHeight();
+        this.tex_w = loop[0].getWidth();
+        this.tex_h = loop[0].getHeight();
         this.center_x = width * (cx / tex_w);
         this.center_y = height * (cy / tex_h);
     }
 
     public void update(float delta) {
         accum += delta;
-        current_frame = (current_frame + (int)(accum / delay)) % images.length;
+        current_frame = (current_frame + (int)(accum / delay)) % loop.length;
         accum = accum % delay;
     }
 
     public void draw(Graphics g, float cx, float cy, boolean flipped) {
         float top_left_x = cx - this.center_x;
         float top_left_y = cy - this.center_y;
-        g.drawImage(images[current_frame].getFlippedCopy(flipped, false), top_left_x, top_left_y, top_left_x + width, top_left_y + height, 0, 0, tex_w, tex_h);
+        g.drawImage(loop[current_frame].getFlippedCopy(flipped, false), top_left_x, top_left_y, top_left_x + width, top_left_y + height, 0, 0, tex_w, tex_h);
     }
 }

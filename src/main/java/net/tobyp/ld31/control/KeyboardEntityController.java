@@ -27,20 +27,17 @@ public class KeyboardEntityController implements KeyListener {
 
 
     public void update(float delta) {
-        if (direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) {
+        if ((direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) || entity.locked) {
             entity.changeVel(new vec2(-entity.getVel().x, 0.f));
-        }else
-        if (entity.getVel().x < direction * entity.getCharacter().getSpeed()) {
+        } else if (entity.getVel().x < direction * entity.getCharacter().getSpeed()) {
             entity.changeVel(new vec2(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta, 0.f));
-        }else
-        if (entity.getVel().x > direction * entity.getCharacter().getSpeed()) {
+        } else if (entity.getVel().x > direction * entity.getCharacter().getSpeed()) {
             entity.changeVel(new vec2(-(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta), 0.f));
         }
 
         if (direction > 0) {
             entity.setFlipped(false);
-        }else
-        if (direction < 0) {
+        } else if (direction < 0) {
             entity.setFlipped(true);
         }
     }
@@ -49,16 +46,12 @@ public class KeyboardEntityController implements KeyListener {
     public void keyPressed(int c, char ch) {
         if (c == this.key_left) {
             direction -= 1.f;
-        }
-        else if (c == this.key_right) {
+        } else if (c == this.key_right) {
             direction += 1.f;
-        }
-        else if (c == this.key_jump) {
+        } else if (c == this.key_jump) {
             entity.jump();
-        }
-        else if (c == this.key_attack) {
+        } else if (c == this.key_attack) {
             entity.melee();
-            GameSound.MELEE.play(1, 1);
         }
     }
 
@@ -66,8 +59,7 @@ public class KeyboardEntityController implements KeyListener {
     public void keyReleased(int c, char ch) {
         if (c == this.key_left) {
             direction += 1.f;
-        }
-        else if (c == this.key_right) {
+        } else if (c == this.key_right) {
             direction -= 1.f;
         }
     }
