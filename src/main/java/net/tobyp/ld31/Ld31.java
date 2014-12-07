@@ -35,7 +35,7 @@ public class Ld31 extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         try {
-            idle_gb = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
+            idle_gb = new SpriteSheet(Ld31.class.getResource("/gb/idle.png"), 256, 256);
             idle_us = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
             hub_gb = new Image(Ld31.class.getResourceAsStream("/gb/hub.png"), "gb_hub", false);
             hub_us = new Image(Ld31.class.getResourceAsStream("/us/hub.png"), "us_hub", false);
