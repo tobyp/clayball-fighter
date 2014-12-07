@@ -34,6 +34,7 @@ public class Ld31 extends StateBasedGame {
         Image hub_us;
         Image hub_se;
         Image arena_us_bg;
+        Image bg_stripes;
 
         try {
             idle_gb = new SpriteSheet(Ld31.class.getResource("/gb/idle.png"), 256, 256);
@@ -43,6 +44,7 @@ public class Ld31 extends StateBasedGame {
             hub_us = new Image(Ld31.class.getResourceAsStream("/us/hub.png"), "us_hub", false);
             hub_se = new Image(Ld31.class.getResourceAsStream("/se/hub.png"), "se_hub", false);
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
+            bg_stripes = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
         } catch (IOException e) {
             e.printStackTrace();
             throw new SlickException(e.getMessage(), e);
@@ -59,7 +61,7 @@ public class Ld31 extends StateBasedGame {
         };
 
         StateFight fight = new StateFight();
-        StateSelection sel = new StateSelection(characters, arenae, fight);
+        StateSelection sel = new StateSelection(characters, arenae, fight, bg_stripes);
         addState(sel);
         addState(fight);
     }

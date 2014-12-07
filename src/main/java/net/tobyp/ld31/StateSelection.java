@@ -22,6 +22,7 @@ public class StateSelection extends BasicGameState {
     private SpriteSheet arrow_sprites;
     private SpriteSheet frame_sprites;
     private SpriteSheet hub_eyes;
+    private Image bg_pattern;
 
     private static final int ARENA_KEY = Input.KEY_TAB;
     private static final float profile_width = 150.0f;
@@ -30,10 +31,14 @@ public class StateSelection extends BasicGameState {
     private KeyboardSelectionController right;
     private StateFight fight_state;
 
-    public StateSelection(Char[] characters, Arena[] arenae, StateFight fight_state) {
+    private int bg_step = 0;
+    private int bg_offset = 0;
+
+    public StateSelection(Char[] characters, Arena[] arenae, StateFight fight_state, Image bg_pattern) {
         this.fight_state = fight_state;
         this.characters = characters;
         this.arenae = arenae;
+        this.bg_pattern = bg_pattern;
 
         left = new KeyboardSelectionController(this, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_S, Input.KEY_SPACE);
         right = new KeyboardSelectionController(this, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP, Input.KEY_DOWN, Input.KEY_LCONTROL);
@@ -79,11 +84,14 @@ public class StateSelection extends BasicGameState {
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         float width = 650.f;
-        //TODO arena preview
 
         Arena arena = arenae[arena_index];
-        //graphics.drawImage(arena.getPreview(), 315, 24, 965, 174, 0, 0, 650, 150);
-        graphics.drawRect(315, 24, 650, 150);
+        graphics.drawImage(arena.getBackground(), 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, arena.getBackground().getWidth(), arena.getBackground().getHeight());
+        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(), bg_pattern.getSubImage(bg_offset, 0, 50, 50), 0, 0);
+        graphics.setColor(new Color(.28f, 0.33f, 0.58f, 0.4f));
+        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight());
+        graphics.setColor(new Color(1, 1, 1));
+
         graphics.drawString(arena.getName(), 415, 74);
         graphics.drawImage(arrow_sprites.getSprite(0, 0), 340, 74);
         graphics.drawImage(arrow_sprites.getSprite(1, 0), 890, 74);
@@ -120,6 +128,17 @@ public class StateSelection extends BasicGameState {
             fight_state.right = right_ent;
             fight_state.arena = arenae[arena_index];
             stateBasedGame.enterState(fight_state.getID());
+        }
+
+        bg_step += i;
+
+        if (bg_step > 100) {
+            bg_step = 0;
+            bg_offset += 1;
+            if (bg_offset > 49) {
+                bg_offset = 0;
+            }
+            System.out.println(bg_offset);
         }
     }
 
