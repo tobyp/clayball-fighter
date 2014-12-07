@@ -36,6 +36,13 @@ public class KeyboardEntityController implements KeyListener {
         if (entity.getVel().x > direction * entity.getCharacter().getSpeed()) {
             entity.changeVel(new vec2(-(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta), 0.f));
         }
+
+        if (direction > 0) {
+            entity.setFlipped(false);
+        }else
+        if (direction < 0) {
+            entity.setFlipped(true);
+        }
     }
 
     @Override

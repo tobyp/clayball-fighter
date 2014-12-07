@@ -61,6 +61,9 @@ public class Entity {
     public void setTarget(Entity entity) {
         this.target = entity;
     }
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
 
     public void jump() {
         if (jumps < 2) {
@@ -75,7 +78,7 @@ public class Entity {
     }
 
     public void render(Graphics graphics) {
-        animation.draw(graphics, pos.x, pos.y);
+        animation.draw(graphics, pos.x, pos.y, flipped);
         //graphics.drawAnimation(animation, );
         graphics.drawRect(pos.x-0.5f, pos.y-0.5f, 1.f, 1.f);
     }
