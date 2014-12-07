@@ -70,8 +70,7 @@ public class Entity {
     }
 
     public void knockBack(float x, float y) {
-        vel = vel.withX(x);
-        vel = vel.add(0, x / 3 + y);
+        vel = vel.withX(x).add(0, x / 3 + y);
     }
 
     public void render(Graphics graphics) {

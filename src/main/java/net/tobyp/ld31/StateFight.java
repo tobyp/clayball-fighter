@@ -27,8 +27,6 @@ public class StateFight extends BasicGameState implements InputListener {
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
 
-    boolean inside = false;
-
     public StateFight() {
 
     }
@@ -45,8 +43,6 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
-        if (!inside) return;
-
         float delta = (float)i/1000.f;
 
         p1_control.update(delta);
@@ -72,8 +68,6 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        if (!inside) return;
-
         Image bg = arena.getBackground();
         graphics.drawImage(bg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, bg.getWidth(), bg.getHeight());
 
@@ -145,18 +139,14 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        System.out.println("Enter Fight");
         p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LCONTROL);
         p2_control = new KeyboardEntityController(right, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RCONTROL);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
-        inside = true;
     }
 
     @Override
     public void leave(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        System.out.println("Leave Fight");
-        inside = false;
         gameContainer.getInput().removeKeyListener(p1_control);
         gameContainer.getInput().removeKeyListener(p2_control);
     }
