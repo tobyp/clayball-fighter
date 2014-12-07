@@ -1,7 +1,6 @@
 package net.tobyp.ld31.control;
 
 import net.tobyp.ld31.ent.Entity;
-import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
@@ -27,7 +26,7 @@ public class KeyboardEntityController implements KeyListener {
 
 
     public void update(float delta) {
-        if ((direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) || entity.locked) {
+        if (direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) {
             entity.changeVel(new vec2(-entity.getVel().x, 0.f));
         } else if (entity.getVel().x < direction * entity.getCharacter().getSpeed()) {
             entity.changeVel(new vec2(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta, 0.f));
@@ -53,6 +52,7 @@ public class KeyboardEntityController implements KeyListener {
         } else if (c == this.key_attack) {
             entity.melee();
         }
+        entity.setBounce(direction != 0.f);
     }
 
     @Override
@@ -62,6 +62,7 @@ public class KeyboardEntityController implements KeyListener {
         } else if (c == this.key_right) {
             direction -= 1.f;
         }
+        entity.setBounce(direction != 0.f);
     }
 
     @Override

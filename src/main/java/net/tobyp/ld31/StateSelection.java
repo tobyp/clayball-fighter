@@ -26,23 +26,28 @@ public class StateSelection extends BasicGameState {
     private Image bg_pattern;
 
     private static final int ARENA_KEY = Input.KEY_TAB;
-    private static final float profile_width = 150.0f;
 
     private KeyboardSelectionController left;
     private KeyboardSelectionController right;
     private StateFight fight_state;
+    private StateIntro intro_state;
 
     private int bg_step = 0;
     private int bg_offset = 0;
 
-    public StateSelection(Char[] characters, Arena[] arenae, StateFight fight_state, Image bg_pattern) {
-        this.fight_state = fight_state;
+    public StateSelection(Char[] characters, Arena[] arenae, StateIntro intro_state, StateFight fight_state) {
         this.characters = characters;
         this.arenae = arenae;
-        this.bg_pattern = bg_pattern;
+        this.fight_state = fight_state;
+        this.intro_state = intro_state;
 
-        left = new KeyboardSelectionController(this, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_S, Input.KEY_SPACE);
-        right = new KeyboardSelectionController(this, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP, Input.KEY_DOWN, Input.KEY_LCONTROL);
+        left = new KeyboardSelectionController(this, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_S, Input.KEY_LCONTROL);
+        right = new KeyboardSelectionController(this, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP, Input.KEY_DOWN, Input.KEY_RCONTROL);
+    }
+
+    public void reset() {
+        left.reset();
+        right.reset();
     }
 
     public int getCharCount() { return characters.length; }
@@ -51,7 +56,7 @@ public class StateSelection extends BasicGameState {
 
     @Override
     public int getID() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -68,6 +73,7 @@ public class StateSelection extends BasicGameState {
             frame_sprites = new SpriteSheet(Ld31.class.getResource("/frames.png"), 150, 170);
             arrow_sprites = new SpriteSheet(Ld31.class.getResource("/arrows.png"), 50, 50);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
+            bg_pattern = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,10 +132,11 @@ public class StateSelection extends BasicGameState {
             Entity left_ent = new Entity(left_char, new vec2(-2.5f, 0.f), 1, false);
             Entity right_ent = new Entity(right_char, new vec2(2.5f, 0.f), 2, true);
 
-            fight_state.left = left_ent;
-            fight_state.right = right_ent;
-            fight_state.arena = arenae[arena_index];
-            stateBasedGame.enterState(fight_state.getID());
+            intro_state.setCharacters(left_char, right_char);
+            fight_state.setArena(arenae[arena_index]);
+            fight_state.setEntities(left_ent, right_ent);
+            stateBasedGame.enterState(intro_state.getID());
+            reset();
         }
 
         bg_step += i;

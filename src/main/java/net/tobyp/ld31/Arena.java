@@ -9,8 +9,6 @@ import org.newdawn.slick.Image;
  */
 public class Arena {
     private Image background;
-    private Image foreground;
-    private Image preview;
     private String name;
     private float left_boundary; //left boundary, in units of balls, from the center (should be negative)
     private float right_boundary; //right boundary, in units of balls, from the center (should be positive)
@@ -27,11 +25,9 @@ public class Arena {
 
     private float ground; //0.0 is top, 1.0 is bottom of image
 
-    public Arena(String name, Image bg, Image fg, Image preview, float ball_width, float ground, float center, float left_boundary, float right_boundary) {
+    public Arena(String name, Image background, float ball_width, float ground, float center, float left_boundary, float right_boundary) {
         this.name = name;
-        this.background = bg;
-        this.foreground = fg;
-        this.preview = preview;
+        this.background = background;
         this.ball_width = ball_width;
         this.center = center;
         this.ground = ground;
@@ -55,14 +51,6 @@ public class Arena {
 
     public String getName() {
         return name;
-    }
-
-    public Image getPreview() {
-        return preview;
-    }
-
-    public Image getForeground() {
-        return foreground;
     }
 
     public Image getBackground() {

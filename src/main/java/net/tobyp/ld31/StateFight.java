@@ -12,17 +12,14 @@ import java.io.IOException;
  * Created by tobyp on 12/6/14.
  */
 public class StateFight extends BasicGameState implements InputListener {
-    public Arena arena;
-    public Entity left;
-    public Entity right;
+    private Arena arena;
+    private Entity left;
+    private Entity right;
     KeyboardEntityController p1_control;
     KeyboardEntityController p2_control;
 
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
-    private SpriteSheet identities;
-    private Image special_lights;
-    private Image divider;
 
     private static final float LEFT_HEALTH_BASE = 142;
     private static final float RIGHT_HEALTH_BASE = 142+448+100;
@@ -30,11 +27,10 @@ public class StateFight extends BasicGameState implements InputListener {
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
 
-    private float game_time;
-    private float display_time = 6;
+    private StateOutro outro_state;
 
-    public StateFight() {
-
+    public StateFight(StateOutro state_outro) {
+        this.outro_state = state_outro;
     }
 
     @Override
@@ -42,13 +38,9 @@ public class StateFight extends BasicGameState implements InputListener {
         try {
             health = new SpriteSheet(Ld31.class.getResource("/health.png"), 448, 79);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
-            identities = new SpriteSheet(Ld31.class.getResource("/identities.png"), 300, 120);
-            special_lights = new Image(Ld31.class.getResourceAsStream("/lights.png"), "lights", false);
-            divider = new Image(Ld31.class.getResourceAsStream("/divider.png"), "divider", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -69,50 +61,15 @@ public class StateFight extends BasicGameState implements InputListener {
             }
         }
 
-        game_time += delta;
-        display_time = Math.max(0, display_time - delta);
-
-        if (game_time > 3 && left.locked && right.locked) {
-            left.locked = false;
-            right.locked = false;
+        if (left.getHealth() <= 0.f || right.getHealth() <= 0.f) {
+            outro_state.setResult(left.getCharacter(), right.getCharacter(), (left.getHealth() < right.getHealth() ? right.getCharacter() : (left.getHealth() > right.getHealth() ? left.getCharacter() : null)));
+            stateBasedGame.enterState(outro_state.getID());
         }
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         graphics.setColor(new Color(1, 1, 1, 1));
-
-        if (display_time > 0) {
-            float scaleup = 2;
-
-            Color win_color = new Color(0.5f, 0.5f, 0.5f, 1f);
-            Color default_color = new Color(0.f, 0.f, 0.5f, 1f);
-
-            special_lights.setImageColor(1, 1, 1, 0.5f);
-
-            Image flagl = left.getCharacter().getFlag().copy();
-            Image flagr = right.getCharacter().getFlag().copy();
-            graphics.drawImage(flagl, 0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), gameContainer.getWidth()/2 - (6-display_time)*250, 0, gameContainer.getWidth() - (6-display_time)*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 1f));
-            graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round(((6-display_time)) * 500), 0);
-            graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round(((6-display_time)) * 300), 0);
-            Image profile = left.getCharacter().getProfileImage();
-            profile.draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            hub_eyes.getSprite(0, 0).draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            Image identity = identities.getSprite(0, 0);
-            identity.draw(gameContainer.getWidth()/4 - identity.getWidth()/2 + (6-display_time)*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
-
-            graphics.drawImage(flagr.getFlippedCopy(true, false), gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), (6-display_time)*250, 0, gameContainer.getWidth()/2 + (6-display_time)*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 1f));
-            graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round(((6-display_time)) * 500), 0);
-            graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round(((6-display_time)) * 300), 0);
-            profile = right.getCharacter().getProfileImage();
-            profile.getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            hub_eyes.getSprite(0, 0).getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + (6-display_time)*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
-            identity = identities.getSprite(0, 1);
-            identity.draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - identity.getWidth()/2 - (6-display_time)*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
-
-            graphics.drawImage(divider, gameContainer.getWidth()/2-divider.getWidth()/2, 0);
-            return;
-        }
 
         Image bg = arena.getBackground();
         graphics.drawImage(bg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, bg.getWidth(), bg.getHeight());
@@ -176,12 +133,6 @@ public class StateFight extends BasicGameState implements InputListener {
                 RIGHT_HEALTH_BASE+24+rhw, 79+20,
                 24, 0,
                 24+rhw, 79);
-
-        Image fg = arena.getForeground();
-        if (fg != null) {
-            graphics.drawImage(fg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, fg.getWidth(), fg.getHeight());
-        }
-
     }
 
     @Override
@@ -196,6 +147,24 @@ public class StateFight extends BasicGameState implements InputListener {
     public void leave(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         gameContainer.getInput().removeKeyListener(p1_control);
         gameContainer.getInput().removeKeyListener(p2_control);
+    }
+
+    public void setEntities(Entity left, Entity right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    public Entity getLeft() {
+        return left;
+    }
+
+
+    public Entity getRight() {
+        return right;
+    }
+
+    public void setArena(Arena arena) {
+        this.arena = arena;
     }
 
     public Arena getArena() {

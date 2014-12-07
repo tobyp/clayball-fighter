@@ -13,13 +13,14 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Char {
     protected String name;
-    protected SpriteSheet sprite_sheet;
+    protected SpriteSheet sprite_sheet, attack_sheet;
     protected Image profile_image, flag_image;
     protected float speed, jump_power;
 
-    public Char(String name, SpriteSheet sprite_sheet, Image hub_image, Image flag_image, float speed, float jump_power) {
+    public Char(String name, SpriteSheet sprite_sheet, SpriteSheet attack_sheet, Image hub_image, Image flag_image, float speed, float jump_power) {
         this.name = name;
         this.sprite_sheet = sprite_sheet;
+        this.attack_sheet = attack_sheet;
         this.profile_image = hub_image;
         this.flag_image = flag_image;
         this.speed = speed;
@@ -45,11 +46,7 @@ public class Char {
     }
 
     public Animation getAttackAnimation() {
-        return new Animation(sprite_sheet, 0.15f, 1.5f, 1.5f, 128, 128);
-    }
-
-    public Animation getWalkAnimation() {
-        return new Animation(sprite_sheet, 0.15f, 1.5f, 1.5f, 128, 128);
+        return new Animation(attack_sheet, 0.07f, 1.5f, 1.5f, 128, 128);
     }
 
     public float getSpeed() {

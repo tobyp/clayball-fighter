@@ -31,6 +31,10 @@ public class KeyboardSelectionController implements KeyListener {
         return selection_index;
     }
 
+    public void reset() {
+        done = false;
+    }
+
     public boolean isDone() {
         return done;
     }

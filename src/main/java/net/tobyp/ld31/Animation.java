@@ -34,10 +34,17 @@ public class Animation {
         this.center_y = height * (cy / tex_h);
     }
 
-    public void update(float delta) {
+    public boolean update(float delta) {
         accum += delta;
-        current_frame = (current_frame + (int)(accum / delay)) % loop.length;
+        current_frame = (current_frame + (int)(accum / delay));
+        boolean was_finished = current_frame >= loop.length;
+        current_frame %= loop.length;
         accum = accum % delay;
+        return was_finished;
+    }
+
+    public float getDuration() {
+        return delay * loop.length;
     }
 
     public void draw(Graphics g, float cx, float cy, boolean flipped) {
