@@ -18,11 +18,12 @@ public class Entity {
     protected int team;
     protected boolean flipped;
     protected Animation animation;
+    protected StateFight stateFight;
 
     protected int jumps = 0;
 
 
-    public Entity( Char character, vec2 pos, int team, boolean flipped) {
+    public Entity(Char character, vec2 pos, int team, boolean flipped) {
         this.character = character;
         this.pos = pos;
         this.team = team;
@@ -34,6 +35,8 @@ public class Entity {
         animation.update(delta);
 
         Arena arena = state.getArena();
+
+        this.stateFight = state;
 
         //dx/dt
         pos = pos.add(vel.mul(delta));
@@ -79,11 +82,25 @@ public class Entity {
         graphics.drawRect(pos.x-0.5f, pos.y-0.5f, 1.f, 1.f);
     }
 
-    public void damage(float amount) {
+    public void damage(vec2 source, float amount) {
         this.health -= amount;
+        knockBack((pos.x - source.x)*(amount*100),(pos.y - source.y)*(amount*100));
     }
 
-    public void attack() {
+    public void melee() {
+        Entity ent;
+        if (stateFight.left != this) ent = stateFight.left;
+        else ent = stateFight.right;
+
+        /*
+        vec2 distance = pos.sub(ent.getPos());
+        if (distance.x > 0f && flipped) return;
+        if (distance.x < 0f && !flipped) return;
+        if (Math.abs(distance.x) > 1.5f) return;
+        if (Math.abs(distance.y) > 0.5f) return;
+        */
+
+        ent.damage(pos, (float) (Math.random() * 0.05));
         //find nearby entities, maybe check if we're facing the right way, and damage them, possibly dependent on distance.
         //we don't need to do any actual targeting.
     }
