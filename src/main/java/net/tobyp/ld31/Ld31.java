@@ -41,17 +41,20 @@ public class Ld31 extends StateBasedGame {
         } catch (IOException e) {
 
         }
-        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f);
 
-        Char char_gb = new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED, ENTITY_JUMP_POWER);
-        Char char_us = new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER);
+        Arena[] arenae = new Arena[]{
+                new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f)
+        };
 
-        Entity p1 = new Entity(char_us, new vec2(-2.5f, 0f), 1, false);
-        Entity p2 = new Entity(char_gb, new vec2(2.5f, 0f), 2, true);
+        Char[] characters = new Char[]{
+                new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED, ENTITY_JUMP_POWER),
+                new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER)
+        };
 
-        fight = new StateFight(arena, p1, p2);
+        StateFight fight = new StateFight();
+        StateSelection sel = new StateSelection(characters, arenae, fight);
+        addState(sel);
         addState(fight);
-        enterState(fight.getID());
     }
 
     public static void main(String[] args) {
