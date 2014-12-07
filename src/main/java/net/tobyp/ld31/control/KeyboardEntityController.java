@@ -56,7 +56,7 @@ public class KeyboardEntityController implements KeyListener {
             entity.jump();
         }
         else if (c == this.key_attack) {
-            entity.attack();
+            entity.melee();
         }
     }
 
