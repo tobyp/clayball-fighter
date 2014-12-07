@@ -20,7 +20,6 @@ public class Entity {
     protected Animation animation;
 
     protected int jumps = 0;
-    protected Entity target = null;
 
 
     public Entity( Char character, vec2 pos, int team, boolean flipped) {
@@ -58,9 +57,6 @@ public class Entity {
         }
     }
 
-    public void setTarget(Entity entity) {
-        this.target = entity;
-    }
     public void setFlipped(boolean flipped) {
         this.flipped = flipped;
     }
@@ -81,6 +77,10 @@ public class Entity {
         animation.draw(graphics, pos.x, pos.y, flipped);
         //graphics.drawAnimation(animation, );
         graphics.drawRect(pos.x-0.5f, pos.y-0.5f, 1.f, 1.f);
+    }
+
+    public void damage(float amount) {
+        this.health -= amount;
     }
 
     public void attack() {
