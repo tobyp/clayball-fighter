@@ -51,8 +51,8 @@ public class Ld31 extends StateBasedGame {
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
             arena_se_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/se/arena.png")));
             flag_gb = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
-            flag_us = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
-            flag_se = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
+            flag_us = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/flag.png")));
+            flag_se = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/se/flag.png")));
             bg_stripes = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
         } catch (IOException e) {
             e.printStackTrace();

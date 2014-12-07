@@ -1,6 +1,7 @@
 package net.tobyp.ld31.control;
 
 import net.tobyp.ld31.StateSelection;
+import net.tobyp.ld31.misc.GameSound;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
@@ -38,18 +39,22 @@ public class KeyboardSelectionController implements KeyListener {
     public void keyPressed(int c, char ch) {
         if (c == key_left && selection_index != 0) {
             selection_index--;
+            GameSound.SELECT.play(1, 1);
             done = false;
         }
         else if (c == key_right && selection_index + 1 < sel.getCharCount()) {
             selection_index++;
+            GameSound.SELECT.play(1, 1);
             done = false;
         }
         else if (c == key_up && selection_index >= sel.getLineWidth()) {
             selection_index-=sel.getLineWidth();
+            GameSound.SELECT.play(1, 1);
             done = false;
         }
         else if (c == key_down && selection_index + sel.getLineWidth() < sel.getCharCount()) {
             selection_index+=sel.getLineWidth();
+            GameSound.SELECT.play(1, 1);
             done = false;
         }
         else if (c == key_accept) {
@@ -57,6 +62,7 @@ public class KeyboardSelectionController implements KeyListener {
             if (done) {
                 System.out.println("Selected "+selection_index);
             }
+            GameSound.CONFIRM.play(1, 1);
         }
     }
 

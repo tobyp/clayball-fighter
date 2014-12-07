@@ -1,6 +1,7 @@
 package net.tobyp.ld31.control;
 
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
@@ -57,6 +58,7 @@ public class KeyboardEntityController implements KeyListener {
         }
         else if (c == this.key_attack) {
             entity.melee();
+            GameSound.MELEE.play(1, 1);
         }
     }
 

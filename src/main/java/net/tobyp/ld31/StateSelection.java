@@ -3,6 +3,7 @@ package net.tobyp.ld31;
 import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.control.KeyboardSelectionController;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -57,6 +58,7 @@ public class StateSelection extends BasicGameState {
     public void keyPressed(int key, char c) {
         if (key == ARENA_KEY) {
             arena_index = (arena_index + 1) % arenae.length;
+            GameSound.SELECT.play(1, 1);
         }
     }
 

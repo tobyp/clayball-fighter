@@ -4,6 +4,7 @@ import net.tobyp.ld31.Animation;
 import net.tobyp.ld31.Arena;
 import net.tobyp.ld31.StateFight;
 import net.tobyp.ld31.character.Char;
+import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Graphics;
 
@@ -68,6 +69,7 @@ public class Entity {
         if (jumps < 2) {
             jumps++;
             vel = vel.withY(-character.getJumpPower());
+            GameSound.JUMP.play(1, 1);
         }
     }
 
