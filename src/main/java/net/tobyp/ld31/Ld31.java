@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 public class Ld31 extends StateBasedGame {
     StateFight fight;
 
-    static final float ENTITY_SPEED = 2.f;
-    static final float ENTITY_JUMP_POWER = 2.7f;
+    static final float ENTITY_SPEED = 4.f;
+    static final float ENTITY_JUMP_POWER = 6f;
     private SpriteSheet idle_gb;
     private SpriteSheet idle_us;
     private Image hub_gb;

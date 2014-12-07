@@ -46,7 +46,7 @@ public class Entity {
             onLand();
         }else
         if (pos.y < 0.f) {
-            vel = vel.add(new vec2(0, 0.1f));
+            vel = vel.add(new vec2(0, 0.2f));
         }
 
         if (pos.x < arena.getLeftBoundary()) {

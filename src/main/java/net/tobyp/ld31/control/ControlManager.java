@@ -37,10 +37,10 @@ public class ControlManager {
                 ent.changeVel(new vec2(-ent.getVel().x, 0.f));
             }else
             if (ent.getVel().x < controller.getHorizontalDirection() * ent.getCharacter().getSpeed()) {
-                ent.changeVel(new vec2(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 500) * i, 0.f));
+                ent.changeVel(new vec2(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 250) * i, 0.f));
             }else
             if (ent.getVel().x > controller.getHorizontalDirection() * ent.getCharacter().getSpeed()) {
-                ent.changeVel(new vec2(-(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 500) * i), 0.f));
+                ent.changeVel(new vec2(-(((ent.getCharacter().getSpeed() * (1 + Math.abs(controller.getHorizontalDirection()))) / 250) * i), 0.f));
             }
 
             if (controller.getHorizontalDirection() != 0.f) {
