@@ -18,7 +18,7 @@ public class Entity {
     protected vec2 vel = new vec2(0.f, 0.f);
     protected Char character;
     protected FighterState state = FighterState.IDLE;
-    protected double health = 1.0;
+    protected double health = 0.7;
     protected int team;
     protected boolean flipped;
     protected Animation animation;
@@ -32,16 +32,17 @@ public class Entity {
     }
 
     public void update(float delta, StateFight state) {
+        animation.update(delta);
 
         Arena arena = state.getArena();
 
         pos = pos.add(vel.mul(delta));
-        if (pos.y <= 0.f) {
+        if (pos.y < 0.f) {
             pos = pos.withY(0.f);
             onLand();
         }
 
-        else if (pos.x < arena.getLeftBoundary()) {
+        if (pos.x < arena.getLeftBoundary()) {
             pos = pos.withX(arena.getLeftBoundary()); //don't change state, we allow "running into the wall"
         }
         else if (pos.x > arena.getRightBoundary()) {

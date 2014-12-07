@@ -20,9 +20,11 @@ import java.util.logging.Logger;
 public class Ld31 extends StateBasedGame {
     StateFight fight;
 
-    static final float ENTITY_SPEED = 1.8f;
+    static final float ENTITY_SPEED = 2.f;
     private SpriteSheet idle_gb;
     private SpriteSheet idle_us;
+    private Image hub_gb;
+    private Image hub_us;
     private Image arena_us_bg;
 
     public Ld31(String title) throws SlickException {
@@ -35,14 +37,16 @@ public class Ld31 extends StateBasedGame {
         try {
             idle_gb = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
             idle_us = new SpriteSheet(Ld31.class.getResource("/us/idle.png"), 256, 256);
+            hub_gb = new Image(Ld31.class.getResourceAsStream("/gb/hub.png"), "gb_hub", false);
+            hub_us = new Image(Ld31.class.getResourceAsStream("/us/hub.png"), "us_hub", false);
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
         } catch (IOException e) {
 
         }
-        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -4.f, 4.f);
+        Arena arena = new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f);
 
-        Char char_gb = new Char("United Kingdom", idle_gb, ENTITY_SPEED);
-        Char char_us = new Char("United States", idle_us, ENTITY_SPEED);
+        Char char_gb = new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED);
+        Char char_us = new Char("United States", idle_us, hub_us, ENTITY_SPEED);
 
         Entity p1 = new Entity(char_us, new vec2(-2.5f, 0f), 1, false);
         Entity p2 = new Entity(char_gb, new vec2(2.5f, 0f), 2, true);
