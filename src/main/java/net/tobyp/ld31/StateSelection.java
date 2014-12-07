@@ -55,7 +55,7 @@ public class StateSelection extends BasicGameState {
 
     @Override
     public void keyPressed(int key, char c) {
-        if (c == ARENA_KEY) {
+        if (key == ARENA_KEY) {
             arena_index = (arena_index + 1) % arenae.length;
         }
     }
@@ -152,5 +152,10 @@ public class StateSelection extends BasicGameState {
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
         container.getInput().removeKeyListener(left);
         container.getInput().removeKeyListener(right);
+    }
+
+    @Override
+    public boolean isAcceptingInput() {
+        return true;
     }
 }
