@@ -138,7 +138,6 @@ public class StateSelection extends BasicGameState {
             if (bg_offset > 49) {
                 bg_offset = 0;
             }
-            System.out.println(bg_offset);
         }
     }
 
