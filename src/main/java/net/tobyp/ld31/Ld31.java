@@ -34,6 +34,7 @@ public class Ld31 extends StateBasedGame {
         Image hub_us;
         Image hub_se;
         Image arena_us_bg;
+        Image arena_se_bg;
 
         try {
             idle_gb = new SpriteSheet(Ld31.class.getResource("/gb/idle.png"), 256, 256);
@@ -43,13 +44,15 @@ public class Ld31 extends StateBasedGame {
             hub_us = new Image(Ld31.class.getResourceAsStream("/us/hub.png"), "us_hub", false);
             hub_se = new Image(Ld31.class.getResourceAsStream("/se/hub.png"), "se_hub", false);
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
+            arena_se_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/se/arena.png")));
         } catch (IOException e) {
             e.printStackTrace();
             throw new SlickException(e.getMessage(), e);
         }
 
         Arena[] arenae = new Arena[]{
-                new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f)
+                new Arena("Western", arena_us_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f),
+                new Arena("IBÖRKA", arena_se_bg, null, null, 9.f, 0.8f, 0.5f, -3.5f, 3.5f)
         };
 
         Char[] characters = new Char[]{
