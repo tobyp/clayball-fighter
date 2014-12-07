@@ -2,7 +2,6 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
-import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -21,12 +20,17 @@ public class StateFight extends BasicGameState implements InputListener {
 
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
+    private Image special_lights;
 
     private static final float LEFT_HEALTH_BASE = 142;
     private static final float RIGHT_HEALTH_BASE = 142+448+100;
 
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
+
+    private Entity displ_special_ent = null;
+    private String displ_special_text = "";
+    private float displ_special_time = 0;
 
     public StateFight() {
 
@@ -37,9 +41,11 @@ public class StateFight extends BasicGameState implements InputListener {
         try {
             health = new SpriteSheet(Ld31.class.getResource("/health.png"), 448, 79);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
+            special_lights = new Image(Ld31.class.getResourceAsStream("/lights.png"), "lights", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -59,10 +65,26 @@ public class StateFight extends BasicGameState implements InputListener {
                 right.knockBack(right.getPos().x - left.getPos().x, 0);
             }
         }
+
+        if (displ_special_time > 0) {
+            displ_special_time -= delta;
+        }else{
+            displ_special_time = 0;
+        }
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+
+        if (displ_special_time > 0) {
+            Image bg = displ_special_ent.getCharacter().getFlag();
+            graphics.drawImage(bg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), bg.getWidth()/4 + displ_special_time*100, bg.getHeight()/4, (bg.getWidth()-bg.getWidth()/4) + displ_special_time*100, bg.getHeight()-bg.getHeight()/4, new Color(0.3f, 0.3f, 0.3f));
+            graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(), special_lights, Math.round(displ_special_time * 500), 0);
+            displ_special_ent.getCharacter().getProfileImage().draw((Math.round(displ_special_time * 500)), (int) Math.round(-(gameContainer.getHeight()*1.5)/3), (int) Math.round(gameContainer.getHeight()*1.5), (int) Math.round(gameContainer.getHeight()*1.5));
+            hub_eyes.getSprite(1, 0).draw((Math.round(displ_special_time * 500)), (int) Math.round(-(gameContainer.getHeight()*1.5)/3), (int) Math.round(gameContainer.getHeight()*1.5), (int) Math.round(gameContainer.getHeight()*1.5));
+            return;
+        }
+
         Image bg = arena.getBackground();
         graphics.drawImage(bg, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, bg.getWidth(), bg.getHeight());
 
@@ -79,6 +101,7 @@ public class StateFight extends BasicGameState implements InputListener {
 
         left.render(graphics);
         right.render(graphics);
+
 
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
@@ -132,12 +155,19 @@ public class StateFight extends BasicGameState implements InputListener {
 
     }
 
+    public void displaySpecial(Entity ent, String msg, float time) {
+        this.displ_special_ent = ent;
+        this.displ_special_text = msg;
+        this.displ_special_time = time;
+    }
+
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_SPACE, Input.KEY_LCONTROL);
         p2_control = new KeyboardEntityController(right, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_NUMPAD0, Input.KEY_RCONTROL);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
+        displaySpecial(left, "Hi", 2);
     }
 
     @Override

@@ -35,7 +35,11 @@ public class Ld31 extends StateBasedGame {
         Image hub_se;
         Image arena_us_bg;
         Image arena_se_bg;
+        Image flag_gb;
+        Image flag_us;
+        Image flag_se;
         Image bg_stripes;
+        Image special_lights;
 
         try {
             idle_gb = new SpriteSheet(Ld31.class.getResource("/gb/idle.png"), 256, 256);
@@ -46,6 +50,9 @@ public class Ld31 extends StateBasedGame {
             hub_se = new Image(Ld31.class.getResourceAsStream("/se/hub.png"), "se_hub", false);
             arena_us_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/us/arena.png")));
             arena_se_bg = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/se/arena.png")));
+            flag_gb = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
+            flag_us = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
+            flag_se = new Image(TextureLoader.getTexture("picture", Ld31.class.getResourceAsStream("/gb/flag.png")));
             bg_stripes = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,9 +65,9 @@ public class Ld31 extends StateBasedGame {
         };
 
         Char[] characters = new Char[]{
-                new Char("United Kingdom", idle_gb, hub_gb, ENTITY_SPEED, ENTITY_JUMP_POWER),
-                new Char("United States", idle_us, hub_us, ENTITY_SPEED, ENTITY_JUMP_POWER),
-                new Char("Sweden", idle_se, hub_se, ENTITY_SPEED, ENTITY_JUMP_POWER)
+                new Char("United Kingdom", idle_gb, hub_gb, flag_gb, ENTITY_SPEED, ENTITY_JUMP_POWER),
+                new Char("United States", idle_us, hub_us, flag_us, ENTITY_SPEED, ENTITY_JUMP_POWER),
+                new Char("Sweden", idle_se, hub_se, flag_se, ENTITY_SPEED, ENTITY_JUMP_POWER)
         };
 
         StateFight fight = new StateFight();

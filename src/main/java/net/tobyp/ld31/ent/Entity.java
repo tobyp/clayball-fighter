@@ -91,15 +91,15 @@ public class Entity {
         if (stateFight.left != this) ent = stateFight.left;
         else ent = stateFight.right;
 
-        /*
-        vec2 distance = pos.sub(ent.getPos());
+
+        vec2 distance = ent.getPos().sub(pos);
         if (distance.x > 0f && flipped) return;
         if (distance.x < 0f && !flipped) return;
         if (Math.abs(distance.x) > 1.5f) return;
         if (Math.abs(distance.y) > 0.5f) return;
-        */
 
-        ent.damage(pos, (float) (Math.random() * 0.05));
+
+        ent.damage(pos, (float) (Math.random() * 0.05) + 0.02f);
         //find nearby entities, maybe check if we're facing the right way, and damage them, possibly dependent on distance.
         //we don't need to do any actual targeting.
     }
