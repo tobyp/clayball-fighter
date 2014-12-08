@@ -32,7 +32,9 @@ public class Entity {
     protected StateFight stateFight;
 
     protected int jumps = 0;
+    protected boolean slam = false;
 
+    public float locked = 0;
 
     public Entity(Char character, vec2 pos, int team, boolean flipped) {
         this.character = character;
@@ -79,6 +81,8 @@ public class Entity {
                 pos = pos.withY(0.f);
                 vel = vel.withY(0.f);
                 jumps = 0;
+                if (slam) slam();
+                slam = false;
             } else if (pos.y < 0.f) {
                 vel = vel.add(new vec2(0, 0.2f));
             }
@@ -97,11 +101,33 @@ public class Entity {
         this.flipped = flipped;
     }
 
+    public void crouch() {
+        if (jumps > 0 && !slam) {
+            slam = true;
+            vel = vel.add(new vec2(0, 7));
+        }
+    }
+
+    public void slam() {
+        Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
+
+        vec2 distance = ent.getPos().sub(pos);
+        if (Math.abs(distance.x) > 2.f) return;
+        if (Math.abs(distance.y) > 1.5f) return;
+
+        ent.damage(pos, (float) (Math.random() * 0.05) +0.04f);
+
+        vel = new vec2(0, 0);
+        locked = 1.5f;
+
+    }
+
     public void jump() {
-        if (jumps < 2) {
+        if (jumps < 2 && !slam) {
             jumps++;
             bounce_time = 0.f;
             vel = vel.withY(-character.getJumpPower());
+            bounce_time = 0.f;
             GameSound.JUMP.play(1, 1);
         }
     }
