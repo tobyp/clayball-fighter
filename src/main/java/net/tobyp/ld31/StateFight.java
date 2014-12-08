@@ -2,6 +2,7 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -54,12 +55,19 @@ public class StateFight extends BasicGameState implements InputListener {
         right.update(delta, this);
 
         //Collisions
-        if (Math.abs(right.getPos().x - left.getPos().x) < 1.f) {
+        vec2 sep = right.getPos().sub(left.getPos());
+        float dist = sep.length();
+        if (dist <= .75f) {
+            vec2 repel = sep.unit().mul(.75f).sub(sep);
+            right.move(repel.mul(.5f));
+            left.move(repel.mul(-.5f));
+        }
+        /*if (Math.abs(right.getPos().x - left.getPos().x) < 1.f) {
             if (Math.abs(right.getPos().y - left.getPos().y) < 0.5f) {
                 left.knockBack(left.getPos().x - right.getPos().x, 0);
                 right.knockBack(right.getPos().x - left.getPos().x, 0);
             }
-        }
+        }*/
 
         if (left.getHealth() <= 0.f || right.getHealth() <= 0.f) {
             outro_state.setResult(left.getCharacter(), right.getCharacter(), (left.getHealth() < right.getHealth() ? right.getCharacter() : (left.getHealth() > right.getHealth() ? left.getCharacter() : null)));
