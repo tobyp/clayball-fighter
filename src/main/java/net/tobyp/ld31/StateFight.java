@@ -24,8 +24,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     private static final float HEALTH_INNER_MARGIN = 17;
     private static final float HEALTH_OUTER_MARGIN = 67;
-    private static final float COMBO_INNER_MARGIN = 23;
-    private static final float COMBO_OUTER_MARGIN = 77;
+    private static final float CHARGE_INNER_MARGIN = 23;
+    private static final float CHARGE_OUTER_MARGIN = 77;
 
     private static final Color health_color = new Color(1.f, 0.f, 0.f);
     private static final Color charge_color = new Color(0.f, 0.f, 1.f);
@@ -128,6 +128,14 @@ public class StateFight extends BasicGameState implements InputListener {
                 0, 0,
                 HEALTH_OUTER_MARGIN+left_health_take, 150,
                 health_color);
+        float left_charge_width = 430.f-CHARGE_OUTER_MARGIN-CHARGE_INNER_MARGIN;
+        float left_charge_take = (float)left.getCharge() * left_charge_width;
+        graphics.drawImage(health.getSprite(0, 2),
+                150.f, 0,
+                150.f+CHARGE_OUTER_MARGIN+left_charge_take, 150,
+                0, 0,
+                CHARGE_OUTER_MARGIN+left_charge_take, 150,
+                charge_color);
         graphics.drawImage(health.getSprite(0, 0), 150, 0);
 
         //right profile
@@ -148,13 +156,21 @@ public class StateFight extends BasicGameState implements InputListener {
         //right health
         float rho = 1280-430-150;
         float right_health_width = 430.f-HEALTH_OUTER_MARGIN-HEALTH_INNER_MARGIN;
-        float right_health_donttake = right_health_width - (float)right.getHealth() * right_health_width;
+        float right_health_donttake = right_health_width * (1.f - (float)right.getHealth());
         graphics.drawImage(health.getSprite(0, 4),
                 rho+HEALTH_INNER_MARGIN+right_health_donttake, 0,
                 1280-150, 150,
                 HEALTH_INNER_MARGIN+right_health_donttake, 0,
                 430, 150,
                 health_color);
+        float right_charge_width = 430.f-CHARGE_OUTER_MARGIN-CHARGE_INNER_MARGIN;
+        float right_charge_donttake = right_charge_width * (1.f - (float)right.getCharge());
+        graphics.drawImage(health.getSprite(0, 5),
+                rho+CHARGE_INNER_MARGIN+right_charge_donttake, 0,
+                1280-150, 150,
+                CHARGE_INNER_MARGIN+right_charge_donttake, 0,
+                430, 150,
+                charge_color);
         graphics.drawImage(health.getSprite(0, 3), rho, 0);
     }
 
