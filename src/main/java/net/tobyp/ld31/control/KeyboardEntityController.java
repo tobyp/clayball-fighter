@@ -17,6 +17,8 @@ public class KeyboardEntityController implements KeyListener {
     private int key_crouch;
     private float direction = 0.f;
 
+    private int keysdown = 0;
+
     public KeyboardEntityController(Entity entity, int key_left, int key_right, int key_jump, int key_attack, int key_crouch) {
         this.entity = entity;
         this.key_left = key_left;
@@ -52,24 +54,38 @@ public class KeyboardEntityController implements KeyListener {
     public void keyPressed(int c, char ch) {
         if (c == this.key_left) {
             direction -= 1.f;
+            keysdown++;
         } else if (c == this.key_right) {
             direction += 1.f;
+            keysdown++;
         } else if (c == this.key_jump) {
             entity.jump();
+            keysdown++;
         } else if (c == this.key_attack) {
             entity.melee();
+            keysdown++;
         } else if (c == this.key_crouch) {
             entity.crouch();
+            keysdown++;
         }
         entity.setBounce(direction != 0.f);
     }
 
     @Override
     public void keyReleased(int c, char ch) {
+        if (keysdown == 0) return;
         if (c == this.key_left) {
             direction += 1.f;
+            keysdown--;
         } else if (c == this.key_right) {
             direction -= 1.f;
+            keysdown--;
+        } else if (c == this.key_jump) {
+            keysdown--;
+        } else if (c == this.key_attack) {
+            keysdown--;
+        } else if (c == this.key_crouch) {
+            keysdown--;
         }
         entity.setBounce(direction != 0.f);
     }
