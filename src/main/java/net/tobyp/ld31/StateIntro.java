@@ -12,7 +12,7 @@ import java.io.IOException;
  * Created by tobyp on 12/7/14.
  */
 public class StateIntro extends BasicGameState {
-    private static final float INTRO_TIME = 1.f;
+    private static final float INTRO_TIME = 4.5f;
 
     private SpriteSheet hub_eyes;
     private SpriteSheet identities;
@@ -71,7 +71,7 @@ public class StateIntro extends BasicGameState {
         graphics.drawImage(flagl,
                 0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(),
                 gameContainer.getWidth()/2 - time*250, 0, gameContainer.getWidth() - time*250, gameContainer.getHeight(),
-                new Color(0, 0, 0.5f, 1f));
+                new Color(.5f, .5f, .5f));
         graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round((time) * 500), 0);
         graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round((time) * 300), 0);
         Image profile = left.getProfileImage();
@@ -80,7 +80,10 @@ public class StateIntro extends BasicGameState {
         Image identity = identities.getSprite(0, 0);
         identity.draw(gameContainer.getWidth()/4 - identity.getWidth()/2 + time*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
 
-        graphics.drawImage(flagr.getFlippedCopy(true, false), gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), time*250, 0, gameContainer.getWidth()/2 + time*250, gameContainer.getHeight(), new Color(0, 0, 0.5f, 1f));
+        graphics.drawImage(flagr,
+                gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), time*250, 0,
+                gameContainer.getWidth()/2 + time*250, gameContainer.getHeight(),
+                new Color(.5f, .5f, .5f));
         graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((time) * 500), 0);
         graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((time) * 300), 0);
         profile = right.getProfileImage();

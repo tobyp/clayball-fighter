@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by tobyp on 12/7/14.
  */
 public class StateOutro extends BasicGameState {
-    private static final float OUTRO_TIME = 8.f;
+    private static final float OUTRO_TIME = 6.f;
     private Char left;
     private Char right;
     private Char winner;
@@ -25,6 +25,7 @@ public class StateOutro extends BasicGameState {
     private float display_time = OUTRO_TIME;
 
     private Image flag;
+    private Image identity;
 
     public StateOutro(int state_selection_id) {
         this.state_selection_id = state_selection_id;
@@ -37,9 +38,11 @@ public class StateOutro extends BasicGameState {
 
         if (winner == null) {
             flag = neutral;
+            identity = identities.getSprite(0, 4);
         }
         else {
             flag = winner.getFlag();
+            identity = identities.getSprite(0, 2);
         }
     }
 
@@ -61,7 +64,23 @@ public class StateOutro extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        float scale = (float)Math.sin(time * 2.f * Math.PI / OUTRO_TIME) + .5f / 2.f; //oscillate 1 time between 0 and 1
 
+        graphics.drawImage(flag,
+                0, 0, flag.getWidth(), flag.getHeight(),
+                0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                new Color(0.4f, 0.4f, 0.4f));
+        float identity_cy = gameContainer.getHeight()/2.f;
+        if (winner != null) {
+            graphics.drawImage(winner.getProfileImage(), (gameContainer.getWidth() - 150) / 2.f, 110, 0, 0, 150, 150);
+            graphics.drawImage(hub_eyes.getSprite(1,0), (gameContainer.getWidth() - 150) / 2.f, 110, 0, 0, 150, 150);
+            identity_cy = 370.f + (gameContainer.getHeight() - 370.f) / 2.f;
+        }
+        float identity_width = scale*identity.getWidth();
+        float identity_height = scale*identity.getHeight();
+        graphics.drawImage(identity,
+                (gameContainer.getWidth()-identity_width)/2.f, identity_cy - (identity_height / 2.f), (gameContainer.getWidth()+identity_width)/2.f, identity_cy + (identity_height / 2.f),
+                0, 0, identity.getWidth(), identity.getHeight());
     }
 
     @Override

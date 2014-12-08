@@ -1,7 +1,9 @@
 package net.tobyp.ld31.character;
 
 import net.tobyp.ld31.Animation;
+import net.tobyp.ld31.Ld31;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 /**
@@ -12,6 +14,9 @@ import org.newdawn.slick.SpriteSheet;
  *  - Catchphrases (?)
  */
 public class Char {
+    static final float SPEED = 4.f;
+    static final float JUMP_POWER = 6f;
+
     protected String name;
     protected SpriteSheet sprite_sheet, attack_sheet;
     protected Image profile_image, flag_image;
@@ -25,6 +30,14 @@ public class Char {
         this.flag_image = flag_image;
         this.speed = speed;
         this.jump_power = jump_power;
+    }
+
+    public static Char loadCharacter(String id, String name) throws SlickException {
+        SpriteSheet idle = new SpriteSheet(new Image(Ld31.class.getResourceAsStream("/"+id+"/idle.png"), id+"_idle", false), 256, 256);
+        SpriteSheet attack = new SpriteSheet(new Image(Ld31.class.getResourceAsStream("/"+id+"/attack.png"), id+"_attack", false), 256, 256);
+        Image hub = new Image(Ld31.class.getResourceAsStream("/"+id+"/hub.png"), id+"_hub", false);
+        Image flag = new Image(Ld31.class.getResourceAsStream("/"+id+"/flag.png"), id+"_flag", false);
+        return new Char(name, idle, attack, hub, flag, SPEED, JUMP_POWER);
     }
 
     public String getName() {
@@ -46,7 +59,7 @@ public class Char {
     }
 
     public Animation getAttackAnimation() {
-        return new Animation(attack_sheet, 0.07f, 1.5f, 1.5f, 128, 128);
+        return new Animation(attack_sheet, 0.05f, 1.5f, 1.5f, 128, 128);
     }
 
     public float getSpeed() {

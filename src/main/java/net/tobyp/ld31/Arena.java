@@ -3,6 +3,8 @@ package net.tobyp.ld31;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.opengl.TextureLoader;
 
 /**
  * Created by tobyp on 12/6/14.
@@ -33,6 +35,11 @@ public class Arena {
         this.ground = ground;
         this.left_boundary = left_boundary;
         this.right_boundary = right_boundary;
+    }
+
+    public static Arena loadArena(String id, String name) throws SlickException {
+        Image bg = new Image(Ld31.class.getResourceAsStream("/"+id+"/arena.png"), id+"_arena", false);
+        return new Arena(name, bg, 9.f, 0.8f, 0.5f, -3.5f, 3.5f);
     }
 
     public void applyTransform(Graphics g, GameContainer gc) {

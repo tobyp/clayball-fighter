@@ -17,6 +17,7 @@ import java.util.List;
 public class Entity {
     protected static final float BOUNCE_PERIOD = .35f;
     protected static final float BOUNCE_HEIGHT = .3f; //can't be too high, as we're not actually offsetting the position (sorry)
+
     protected vec2 pos; //defined such that y=0 is the baseline (center of a ball when it's touching the ground), x=0 is the center, and the unit is round about the diameter of a polandball
     protected vec2 vel = new vec2(0.f, 0.f);
     protected Char character;
@@ -47,7 +48,7 @@ public class Entity {
             animation = base_animation;
         };
 
-        if (bouncing && jumps == 0) {
+        /*if (bouncing && jumps == 0) {
             bounce_time = (bounce_time + delta) % BOUNCE_PERIOD;
         }
         else {
@@ -56,6 +57,16 @@ public class Entity {
                 if (bounce_time > BOUNCE_PERIOD) {
                     bounce_time = 0.f;
                 }
+            }
+        }*/
+
+        if (bouncing && jumps == 0 || bounce_time > 0) {
+            bounce_time += delta;
+            if (!bouncing) {
+                bounce_time = 0.f;
+            }
+            else {
+                bounce_time %= BOUNCE_PERIOD;
             }
         }
 
@@ -94,7 +105,7 @@ public class Entity {
         }
     }
     public void damage(vec2 source, float amount) {
-        this.health -= amount;
+        this.health = Math.max(0.f, health - amount);
         knockBack((pos.x - source.x) * (amount * 100), (pos.y - source.y) * (amount * 100));
     }
 

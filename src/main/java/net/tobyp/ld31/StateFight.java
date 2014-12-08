@@ -88,7 +88,6 @@ public class StateFight extends BasicGameState implements InputListener {
         left.render(graphics);
         right.render(graphics);
 
-
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
 
