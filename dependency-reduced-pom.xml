@@ -111,7 +111,7 @@
     </repository>
   </repositories>
   <properties>
-    <lwjgl.version>2.8.2</lwjgl.version>
+    <lwjgl.version>[2.9.0,)</lwjgl.version>
     <natives.version>0.0.6</natives.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

@@ -41,8 +41,8 @@ public class StateSelection extends BasicGameState {
         this.fight_state = fight_state;
         this.intro_state = intro_state;
 
-        left = new KeyboardSelectionController(this, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_S, Input.KEY_LSHIFT);
-        right = new KeyboardSelectionController(this, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP, Input.KEY_DOWN, Input.KEY_RSHIFT);
+        left = new KeyboardSelectionController(this, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_S, Input.KEY_C);
+        right = new KeyboardSelectionController(this, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_K, Input.KEY_PERIOD);
     }
 
     public void reset() {
