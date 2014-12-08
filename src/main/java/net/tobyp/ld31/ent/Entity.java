@@ -138,6 +138,7 @@ public class Entity {
         //graphics.drawRect(pos.x - 0.5f, pos.y - 0.5f + bounce_y, 1.f, 1.f);
     }
 
+    public void move(vec2 d) { this.pos = this.pos.add(d); }
 
     public void changeVel(vec2 vel) {
         this.vel = this.vel.add(vel);

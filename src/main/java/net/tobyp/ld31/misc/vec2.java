@@ -54,7 +54,7 @@ public class vec2 {
     }
 
     public float length() {
-        return (float)Math.sqrt(this.x*this.y +this.y*this.y);
+        return (float)Math.sqrt(this.x*this.x +this.y*this.y);
     }
 
     public vec2 unit() {
