@@ -125,6 +125,7 @@ public class Entity {
     public void jump() {
         if (jumps < 2 && !slam) {
             jumps++;
+            bounce_time = 0.f;
             vel = vel.withY(-character.getJumpPower());
             bounce_time = 0.f;
             GameSound.JUMP.play(1, 1);
