@@ -7,6 +7,7 @@ import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.Log;
 
 import java.lang.management.BufferPoolMXBean;
 import java.util.List;
@@ -34,7 +35,12 @@ public class Entity {
     protected int jumps = 0;
     protected boolean slam = false;
 
+    protected int streak = 0;
+    protected int combo = 0;
+
     public float locked = 0;
+    public float lastdmg = 0;
+    public float lastattack = 0;
 
     public Entity(Char character, vec2 pos, int team, boolean flipped) {
         this.character = character;
@@ -75,26 +81,39 @@ public class Entity {
         Arena arena = state.getArena();
         this.stateFight = state;
 
-            //dx/dt
-            pos = pos.add(vel.mul(delta));
-            if (pos.y > 0.f) { //Game is set in australia
-                pos = pos.withY(0.f);
-                vel = vel.withY(0.f);
-                jumps = 0;
-                if (slam) slam();
-                slam = false;
-            } else if (pos.y < 0.f) {
-                vel = vel.add(new vec2(0, 0.2f));
-            }
+        //dx/dt
+        pos = pos.add(vel.mul(delta));
+        if (pos.y > 0.f) { //Game is set in australia
+            pos = pos.withY(0.f);
+            vel = vel.withY(0.f);
+            jumps = 0;
+            if (slam) slam();
+            slam = false;
+        } else if (pos.y < 0.f && vel.y < 7.f) {
+            vel = vel.add(new vec2(0, 0.2f));
+        }
 
-            //x
-            if (pos.x < arena.getLeftBoundary()) {
-                pos = pos.withX(arena.getLeftBoundary());
-                knockBack(-vel.x, 0);
-            } else if (pos.x > arena.getRightBoundary()) {
-                pos = pos.withX(arena.getRightBoundary());
-                knockBack(-vel.x, 0);
+        //x
+        if (pos.x < arena.getLeftBoundary()) {
+            pos = pos.withX(arena.getLeftBoundary());
+            knockBack(-vel.x, 0);
+        } else if (pos.x > arena.getRightBoundary()) {
+            pos = pos.withX(arena.getRightBoundary());
+            knockBack(-vel.x, 0);
+        }
+
+        if (lastdmg > 0) {
+            lastdmg -= delta;
+        }else{
+            if (health < 1) {
+                health = Math.min(1.f, health + delta/50);
             }
+        }
+
+        if (lastattack > 0) {
+            lastattack = Math.max(0.f, lastattack - delta);
+            if (lastattack == 0) expireStreak();
+        }
     }
 
     public void setFlipped(boolean flipped) {
@@ -112,8 +131,8 @@ public class Entity {
         Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
 
         vec2 distance = ent.getPos().sub(pos);
-        if (Math.abs(distance.x) > 2.f) return;
-        if (Math.abs(distance.y) > 1.5f) return;
+        if (Math.abs(distance.x) > 1.5f) return;
+        if (Math.abs(distance.y) > 1.2f) return;
 
         ent.damage(pos, (float) (Math.random() * 0.05) +0.04f);
 
@@ -131,13 +150,20 @@ public class Entity {
             GameSound.JUMP.play(1, 1);
         }
     }
+
     public void damage(vec2 source, float amount) {
         this.health = Math.max(0.f, health - amount);
         knockBack((pos.x - source.x) * (amount * 100), (pos.y - source.y) * (amount * 100));
+
+        lastdmg = 3.f;
+
+        resetStreak();
     }
 
     public void melee() {
         Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
+
+        animation = character.getAttackAnimation();
 
         vec2 distance = ent.getPos().sub(pos);
         if (distance.x > 0f && flipped) return;
@@ -146,12 +172,39 @@ public class Entity {
         if (Math.abs(distance.y) > 0.5f) return;
 
         GameSound.MELEE.play(1, 1);
-        animation = character.getAttackAnimation();
         ent.damage(pos, (float) (Math.random() * 0.05) + 0.02f);
+
+        updateStreak(1);
+
+        lastattack = 3.f;
     }
 
     public void knockBack(float x, float y) {
         vel = vel.withX(x).add(0, x / 3 + y);
+    }
+
+    public void updateStreak(int update) {
+        int newstreak = streak + update;
+
+        if (newstreak >= 3) {
+            combo = newstreak;
+            Log.info("STREAK " + newstreak);
+        }
+
+        streak = newstreak;
+    }
+
+    public void resetStreak() {
+        if (combo > 0) {
+            Log.info("C-C-COMBO BREAKERRR");
+        }
+
+        streak = 0;
+    }
+
+    public void expireStreak() {
+        streak = 0;
+        Log.info("Streak expired");
     }
 
     public void setBounce(boolean bounce) {
