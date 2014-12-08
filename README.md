@@ -14,8 +14,8 @@ Clayball Fighter, based on the original Polandball comics (http://www.reddit.com
 
 ## Controls
 
-- Left: WASD for movement, Left CTRL to choose/attack, Space to jump
-- Right: Arrow keys for movement, Right CTRL to choose/attack, Numpad 0 to jump (try numlock if it doesn't work)
+- Left: WASD for movement, Left CTRL to choose/attack
+- Right: Arrow keys for movement, Right CTRL to choose/attack
 
 ## Wishlist
 

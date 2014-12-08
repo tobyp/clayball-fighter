@@ -100,6 +100,7 @@ public class Entity {
     public void jump() {
         if (jumps < 2) {
             jumps++;
+            bounce_time = 0.f;
             vel = vel.withY(-character.getJumpPower());
             GameSound.JUMP.play(1, 1);
         }

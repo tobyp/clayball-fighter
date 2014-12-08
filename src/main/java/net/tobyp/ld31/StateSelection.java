@@ -19,7 +19,7 @@ public class StateSelection extends BasicGameState {
     private Char[] characters;
     private int arena_index = 0;
     private Arena[] arenae;
-    
+
     private SpriteSheet frame_sprites;
     private SpriteSheet hub_eyes;
     private Image bg_pattern;
