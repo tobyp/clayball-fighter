@@ -2,6 +2,7 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.TextParticle;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -73,6 +74,8 @@ public class StateFight extends BasicGameState implements InputListener {
             outro_state.setResult(left.getCharacter(), right.getCharacter(), (left.getHealth() < right.getHealth() ? right.getCharacter() : (left.getHealth() > right.getHealth() ? left.getCharacter() : null)));
             stateBasedGame.enterState(outro_state.getID());
         }
+
+        TextParticle.update(delta);
     }
 
     @Override
@@ -98,6 +101,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
+
+        TextParticle.render(gameContainer, graphics);
 
         graphics.drawImage(health.getSprite(0, 1), 142, 20);
         graphics.drawImage(left.getCharacter().getProfileImage(), 0, 0);

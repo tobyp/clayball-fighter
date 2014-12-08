@@ -6,6 +6,7 @@ import net.tobyp.ld31.StateFight;
 import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.Log;
 
@@ -90,7 +91,7 @@ public class Entity {
             if (slam) slam();
             slam = false;
         } else if (pos.y < 0.f && vel.y < 7.f) {
-            vel = vel.add(new vec2(0, 0.2f));
+            vel = vel.add(new vec2(0, (float) (0.2/16)*(delta*1000)));
         }
 
         //x
@@ -149,6 +150,8 @@ public class Entity {
             bounce_time = 0.f;
             GameSound.JUMP.play(1, 1);
         }
+
+        TextParticle.add(pos, "Hi!", new Color(1, 0, 0), 2.f);
     }
 
     public void damage(vec2 source, float amount) {

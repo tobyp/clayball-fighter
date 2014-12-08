@@ -35,6 +35,8 @@ public class StateSelection extends BasicGameState {
     private int bg_step = 0;
     private int bg_offset = 0;
 
+    private SpriteSheetFont font;
+
     public StateSelection(Char[] characters, Arena[] arenae, StateIntro intro_state, StateFight fight_state) {
         this.characters = characters;
         this.arenae = arenae;
@@ -74,6 +76,7 @@ public class StateSelection extends BasicGameState {
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
             keycaps = new Image(Ld31.class.getResourceAsStream("/keycaps.png"), "keycaps", false);
             bg_pattern = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
+            font = new SpriteSheetFont(new SpriteSheet(Ld31.class.getResource("/fonts/scribble.png"), 30, 42), ' ');
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,6 +94,8 @@ public class StateSelection extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        if (graphics.getFont() != font) graphics.setFont(font);
+
         float width = 650.f;
 
         Arena arena = arenae[arena_index];
@@ -105,7 +110,7 @@ public class StateSelection extends BasicGameState {
         graphics.setColor(new Color(1, 1, 1));
 
         int w = graphics.getFont().getWidth(arena.getName());
-        graphics.drawString(arena.getName(), (gameContainer.getWidth() - w) / 2.f, 74);
+        graphics.drawString(arena.getName().toUpperCase(), (gameContainer.getWidth() - w) / 2.f, 74);
 
         graphics.drawImage(keycaps,
                 0, 0, gameContainer.getWidth(), gameContainer.getHeight(),

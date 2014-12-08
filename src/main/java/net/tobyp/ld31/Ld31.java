@@ -6,6 +6,7 @@ import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class Ld31 extends StateBasedGame {
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         Arena[] arenae = new Arena[]{
                 Arena.loadArena("us", "Western (United States)"),
-                Arena.loadArena("se", "IBÖRKA (Sweden)"),
+                Arena.loadArena("se", "IBORKA (Sweden)"),
         };
 
         Char[] characters = new Char[]{
