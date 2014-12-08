@@ -14,18 +14,25 @@ public class KeyboardEntityController implements KeyListener {
     private int key_right;
     private int key_jump;
     private int key_attack;
+    private int key_crouch;
     private float direction = 0.f;
 
-    public KeyboardEntityController(Entity entity, int key_left, int key_right, int key_jump, int key_attack) {
+    public KeyboardEntityController(Entity entity, int key_left, int key_right, int key_jump, int key_attack, int key_crouch) {
         this.entity = entity;
         this.key_left = key_left;
         this.key_right = key_right;
         this.key_jump = key_jump;
         this.key_attack = key_attack;
+        this.key_crouch = key_crouch;
     }
 
 
     public void update(float delta) {
+        if (entity.locked > 0) {
+            entity.locked -= delta;
+            return;
+        }
+
         if (direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) {
             entity.changeVel(new vec2(-entity.getVel().x, 0.f));
         } else if (entity.getVel().x < direction * entity.getCharacter().getSpeed()) {
@@ -51,6 +58,8 @@ public class KeyboardEntityController implements KeyListener {
             entity.jump();
         } else if (c == this.key_attack) {
             entity.melee();
+        } else if (c == this.key_crouch) {
+            entity.crouch();
         }
         entity.setBounce(direction != 0.f);
     }
