@@ -57,7 +57,6 @@ public class StateFight extends BasicGameState implements InputListener {
         //Collisions
         vec2 sep = right.getPos().sub(left.getPos());
         float dist = sep.length();
-        System.out.println(dist);
         if (dist <= .75f) {
             vec2 repel = sep.unit().mul(.75f).sub(sep);
             right.move(repel.mul(.5f));
