@@ -22,8 +22,13 @@ public class StateFight extends BasicGameState implements InputListener {
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
 
-    private static final float LEFT_HEALTH_BASE = 142;
-    private static final float RIGHT_HEALTH_BASE = 142+448+100;
+    private static final float HEALTH_INNER_MARGIN = 17;
+    private static final float HEALTH_OUTER_MARGIN = 67;
+    private static final float COMBO_INNER_MARGIN = 23;
+    private static final float COMBO_OUTER_MARGIN = 77;
+
+    private static final Color health_color = new Color(1.f, 0.f, 0.f);
+    private static final Color charge_color = new Color(0.f, 0.f, 1.f);
 
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
@@ -37,7 +42,7 @@ public class StateFight extends BasicGameState implements InputListener {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         try {
-            health = new SpriteSheet(Ld31.class.getResource("/health.png"), 448, 79);
+            health = new SpriteSheet(Ld31.class.getResource("/bar.png"), 430, 150);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,7 +104,7 @@ public class StateFight extends BasicGameState implements InputListener {
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
 
-        graphics.drawImage(health.getSprite(0, 1), 142, 20);
+        //left profile
         graphics.drawImage(left.getCharacter().getProfileImage(), 0, 0);
         if (left.getHealth() >= HAPPY_THRESH) {
             graphics.drawImage(hub_eyes.getSubImage(1,0), 0, 0);
@@ -113,33 +118,44 @@ public class StateFight extends BasicGameState implements InputListener {
         else {
             graphics.drawImage(hub_eyes.getSubImage(3,0), 0, 0);
         }
-        int lhw = (int)((448-19-14)*(left.getHealth())); //actual width of red, the 19/14 are the left/right margins
-        graphics.drawImage(health.getSprite(0, 0),
-                LEFT_HEALTH_BASE+(448-14)-lhw, 20,
-                LEFT_HEALTH_BASE+(448-14), 79+20,
-                (448-14)-lhw, 0,
-                (448-14), 79);
-        graphics.drawImage(health.getSprite(0, 3), 142+448+100, 20);
+
+        //left health
+        float left_health_width = 430.f-HEALTH_OUTER_MARGIN-HEALTH_INNER_MARGIN;
+        float left_health_take = (float)left.getHealth() * left_health_width;
+        graphics.drawImage(health.getSprite(0, 1),
+                150.f, 0,
+                150.f+HEALTH_OUTER_MARGIN+left_health_take, 150,
+                0, 0,
+                HEALTH_OUTER_MARGIN+left_health_take, 150,
+                health_color);
+        graphics.drawImage(health.getSprite(0, 0), 150, 0);
+
+        //right profile
         graphics.drawImage(right.getCharacter().getProfileImage(), 1280-150, 0);
         if (right.getHealth() >= HAPPY_THRESH) {
-            graphics.drawImage(hub_eyes.getSubImage(1,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(1, 0), 1280-150, 0);
         }
         else if (right.getHealth() >= SAD_THRESH) {
-            graphics.drawImage(hub_eyes.getSubImage(0,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(0, 0), 1280-150, 0);
         }
         else if (right.getHealth() > 0.f) {
-            graphics.drawImage(hub_eyes.getSubImage(2,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(2, 0), 1280-150, 0);
         }
         else {
-            graphics.drawImage(hub_eyes.getSubImage(3,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(3, 0), 1280-150, 0);
         }
-        int rhw = (int)((448-24-28)*(right.getHealth())); //actual width of red, the 24/28 are the left/right margins
-        //Health Bars here
-        graphics.drawImage(health.getSprite(0, 2),
-                RIGHT_HEALTH_BASE+24, 20,
-                RIGHT_HEALTH_BASE+24+rhw, 79+20,
-                24, 0,
-                24+rhw, 79);
+
+        //right health
+        float rho = 1280-430-150;
+        float right_health_width = 430.f-HEALTH_OUTER_MARGIN-HEALTH_INNER_MARGIN;
+        float right_health_donttake = right_health_width - (float)right.getHealth() * right_health_width;
+        graphics.drawImage(health.getSprite(0, 4),
+                rho+HEALTH_INNER_MARGIN+right_health_donttake, 0,
+                1280-150, 150,
+                HEALTH_INNER_MARGIN+right_health_donttake, 0,
+                430, 150,
+                health_color);
+        graphics.drawImage(health.getSprite(0, 3), rho, 0);
     }
 
     @Override
