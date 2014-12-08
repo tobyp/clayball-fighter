@@ -64,28 +64,32 @@ public class StateIntro extends BasicGameState {
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         float scaleup = 2;
 
-        special_lights.setImageColor(1, 1, 1, 0.35f);
-
-        Image flagl = left.getFlag().copy();
-        Image flagr = right.getFlag().copy();
+        Image flagl = left.getFlag();
+        Image flagr = right.getFlag();
+        float flag_progress = time/INTRO_TIME;
         graphics.drawImage(flagl,
                 0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(),
-                gameContainer.getWidth()/2 - time*250, 0, gameContainer.getWidth() - time*250, gameContainer.getHeight(),
+                flag_progress * flagl.getWidth() / 2.f, 0, (1.f + flag_progress) * flagl.getWidth() / 2.f, gameContainer.getHeight(),
                 new Color(.5f, .5f, .5f));
-        graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round((time) * 500), 0);
-        graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, special_lights.getWidth() + gameContainer.getWidth()/2 - Math.round((time) * 300), 0);
+        graphics.drawImage(flagr,
+                gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                flag_progress * flagr.getWidth() / 2.f, 0, (1.f + flag_progress) * flagr.getWidth() / 2.f, gameContainer.getHeight(),
+                new Color(.5f, .5f, .5f));
+
+        special_lights.setImageColor(1, 1, 1, 0.35f);
+        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                special_lights,
+                time * 1280.f, 0);
+        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                special_lights,
+                time * 720.f, 0);
+
         Image profile = left.getProfileImage();
         profile.draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
         hub_eyes.getSprite(0, 0).draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
         Image identity = identities.getSprite(0, 0);
         identity.draw(gameContainer.getWidth()/4 - identity.getWidth()/2 + time*20, gameContainer.getHeight() - gameContainer.getHeight()/4);
 
-        graphics.drawImage(flagr,
-                gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(), time*250, 0,
-                gameContainer.getWidth()/2 + time*250, gameContainer.getHeight(),
-                new Color(.5f, .5f, .5f));
-        graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((time) * 500), 0);
-        graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth()/2, gameContainer.getHeight(), special_lights, Math.round((time) * 300), 0);
         profile = right.getProfileImage();
         profile.getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
         hub_eyes.getSprite(0, 0).getFlippedCopy(true, false).draw(gameContainer.getWidth() - gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup + time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);

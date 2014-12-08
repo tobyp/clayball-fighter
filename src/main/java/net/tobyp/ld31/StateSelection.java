@@ -19,11 +19,11 @@ public class StateSelection extends BasicGameState {
     private Char[] characters;
     private int arena_index = 0;
     private Arena[] arenae;
-
-    private SpriteSheet arrow_sprites;
+    
     private SpriteSheet frame_sprites;
     private SpriteSheet hub_eyes;
     private Image bg_pattern;
+    private Image keycaps;
 
     private static final int ARENA_KEY = Input.KEY_TAB;
 
@@ -71,8 +71,8 @@ public class StateSelection extends BasicGameState {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         try {
             frame_sprites = new SpriteSheet(Ld31.class.getResource("/frames.png"), 150, 170);
-            arrow_sprites = new SpriteSheet(Ld31.class.getResource("/arrows.png"), 50, 50);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
+            keycaps = new Image(Ld31.class.getResourceAsStream("/keycaps.png"), "keycaps", false);
             bg_pattern = new Image(Ld31.class.getResourceAsStream("/stripes.png"), "stripes", false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,15 +94,22 @@ public class StateSelection extends BasicGameState {
         float width = 650.f;
 
         Arena arena = arenae[arena_index];
-        graphics.drawImage(arena.getBackground(), 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), 0, 0, arena.getBackground().getWidth(), arena.getBackground().getHeight());
-        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(), bg_pattern.getSubImage(bg_offset, 0, 50, 50), 0, 0);
+        graphics.drawImage(arena.getBackground(),
+                0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                0, 0, arena.getBackground().getWidth(), arena.getBackground().getHeight());
+        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                bg_pattern.getSubImage(bg_offset, 0, 50, 50),
+                0, 0);
         graphics.setColor(new Color(.28f, 0.33f, 0.58f, 0.4f));
         graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight());
         graphics.setColor(new Color(1, 1, 1));
 
-        graphics.drawString(arena.getName(), 415, 74);
-        graphics.drawImage(arrow_sprites.getSprite(0, 0), 340, 74);
-        graphics.drawImage(arrow_sprites.getSprite(1, 0), 890, 74);
+        int w = graphics.getFont().getWidth(arena.getName());
+        graphics.drawString(arena.getName(), (gameContainer.getWidth() - w) / 2.f, 74);
+
+        graphics.drawImage(keycaps,
+                0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                0, 0, keycaps.getWidth(), keycaps.getHeight());
 
         for (int i=0; i<characters.length; i++) {
             float x = getXOfIndex(i);
