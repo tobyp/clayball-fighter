@@ -141,8 +141,8 @@ public class StateSelection extends BasicGameState {
             Char left_char = characters[left.getSelectionIndex()];
             Char right_char = characters[right.getSelectionIndex()];
 
-            Entity left_ent = new Entity(left_char, new vec2(-2.5f, 0.f), 1, false);
-            Entity right_ent = new Entity(right_char, new vec2(2.5f, 0.f), 2, true);
+            Entity left_ent = new Entity(left_char, new vec2(-2.5f, 0.f), false);
+            Entity right_ent = new Entity(right_char, new vec2(2.5f, 0.f), true);
 
             intro_state.setCharacters(left_char, right_char);
             fight_state.setArena(arenae[arena_index]);

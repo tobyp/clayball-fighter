@@ -23,8 +23,8 @@ public class Entity {
     protected vec2 pos; //defined such that y=0 is the baseline (center of a ball when it's touching the ground), x=0 is the center, and the unit is round about the diameter of a polandball
     protected vec2 vel = new vec2(0.f, 0.f);
     protected Char character;
-    protected double health = 1;
-    protected int team;
+    protected double health = 1; // 0 to 1
+    protected double charge = 1; //0 to 1
     protected boolean flipped;
     protected Animation animation;
     protected Animation base_animation;
@@ -43,10 +43,9 @@ public class Entity {
     public float lastdmg = 0;
     public float lastattack = 0;
 
-    public Entity(Char character, vec2 pos, int team, boolean flipped) {
+    public Entity(Char character, vec2 pos, boolean flipped) {
         this.character = character;
         this.pos = pos;
-        this.team = team;
         this.flipped = flipped;
         this.base_animation = character.getIdleAnimation();
         this.animation = base_animation;
@@ -119,6 +118,10 @@ public class Entity {
 
     public void setFlipped(boolean flipped) {
         this.flipped = flipped;
+    }
+
+    public boolean getFlipped() {
+        return flipped;
     }
 
     public void crouch() {
@@ -244,11 +247,7 @@ public class Entity {
         return health;
     }
 
-    public boolean isDead() {
-        return health <= 0.0;
-    }
-
-    public int getTeam() {
-        return team;
+    public double getCharge() {
+        return charge;
     }
 }

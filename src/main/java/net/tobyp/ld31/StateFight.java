@@ -3,12 +3,16 @@ package net.tobyp.ld31;
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
 import net.tobyp.ld31.ent.TextParticle;
+import net.tobyp.ld31.ent.Projectile;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by tobyp on 12/6/14.
@@ -23,11 +27,23 @@ public class StateFight extends BasicGameState implements InputListener {
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
 
-    private static final float LEFT_HEALTH_BASE = 142;
-    private static final float RIGHT_HEALTH_BASE = 142+448+100;
+    private List<Projectile> projectiles = new LinkedList<Projectile>();
+
+    private static final
+
+    float HEALTH_INNER_MARGIN = 17;
+    private static final float HEALTH_OUTER_MARGIN = 67;
+    private static final float CHARGE_INNER_MARGIN = 23;
+    private static final float CHARGE_OUTER_MARGIN = 77;
+
+    private static final Color health_color = new Color(1.f, 0.f, 0.f);
+    private static final Color charge_color = new Color(0.f, 0.f, 1.f);
 
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
+
+    private static final float PROJECTILE_SPEED = 12.f;
+    private static final float PROJECTILE_LIFT = -1.f;
 
     private StateOutro outro_state;
 
@@ -35,10 +51,15 @@ public class StateFight extends BasicGameState implements InputListener {
         this.outro_state = state_outro;
     }
 
+    public void addProjectile(Entity e) {
+        Projectile p = new Projectile(e == left ? right : left, e.getPos(), e.getVel().add(e.getFlipped() ? -PROJECTILE_SPEED : PROJECTILE_SPEED, PROJECTILE_LIFT), e.getCharacter().getProjectileAnimation());
+        projectiles.add(p);
+    }
+
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         try {
-            health = new SpriteSheet(Ld31.class.getResource("/health.png"), 448, 79);
+            health = new SpriteSheet(Ld31.class.getResource("/bar.png"), 430, 150);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,6 +75,12 @@ public class StateFight extends BasicGameState implements InputListener {
 
         left.update(delta, this);
         right.update(delta, this);
+
+        Iterator<Projectile> it = projectiles.iterator();
+        while (it.hasNext()) {
+            Projectile p = it.next();
+            if (!p.update(delta)) it.remove();
+        }
 
         //Collisions
         vec2 sep = right.getPos().sub(left.getPos());
@@ -99,12 +126,16 @@ public class StateFight extends BasicGameState implements InputListener {
         left.render(graphics);
         right.render(graphics);
 
+        for (Projectile p : projectiles) {
+            p.render(graphics);
+        }
+
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
 
         TextParticle.render(gameContainer, graphics);
 
-        graphics.drawImage(health.getSprite(0, 1), 142, 20);
+        //left profile
         graphics.drawImage(left.getCharacter().getProfileImage(), 0, 0);
         if (left.getHealth() >= HAPPY_THRESH) {
             graphics.drawImage(hub_eyes.getSubImage(1,0), 0, 0);
@@ -118,39 +149,66 @@ public class StateFight extends BasicGameState implements InputListener {
         else {
             graphics.drawImage(hub_eyes.getSubImage(3,0), 0, 0);
         }
-        int lhw = (int)((448-19-14)*(left.getHealth())); //actual width of red, the 19/14 are the left/right margins
-        graphics.drawImage(health.getSprite(0, 0),
-                LEFT_HEALTH_BASE+(448-14)-lhw, 20,
-                LEFT_HEALTH_BASE+(448-14), 79+20,
-                (448-14)-lhw, 0,
-                (448-14), 79);
-        graphics.drawImage(health.getSprite(0, 3), 142+448+100, 20);
+
+        //left health
+        float left_health_width = 430.f-HEALTH_OUTER_MARGIN-HEALTH_INNER_MARGIN;
+        float left_health_take = (float)left.getHealth() * left_health_width;
+        graphics.drawImage(health.getSprite(0, 1),
+                150.f, 0,
+                150.f+HEALTH_OUTER_MARGIN+left_health_take, 150,
+                0, 0,
+                HEALTH_OUTER_MARGIN+left_health_take, 150,
+                health_color);
+        float left_charge_width = 430.f-CHARGE_OUTER_MARGIN-CHARGE_INNER_MARGIN;
+        float left_charge_take = (float)left.getCharge() * left_charge_width;
+        graphics.drawImage(health.getSprite(0, 2),
+                150.f, 0,
+                150.f+CHARGE_OUTER_MARGIN+left_charge_take, 150,
+                0, 0,
+                CHARGE_OUTER_MARGIN+left_charge_take, 150,
+                charge_color);
+        graphics.drawImage(health.getSprite(0, 0), 150, 0);
+
+        //right profile
         graphics.drawImage(right.getCharacter().getProfileImage(), 1280-150, 0);
         if (right.getHealth() >= HAPPY_THRESH) {
-            graphics.drawImage(hub_eyes.getSubImage(1,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(1, 0), 1280-150, 0);
         }
         else if (right.getHealth() >= SAD_THRESH) {
-            graphics.drawImage(hub_eyes.getSubImage(0,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(0, 0), 1280-150, 0);
         }
         else if (right.getHealth() > 0.f) {
-            graphics.drawImage(hub_eyes.getSubImage(2,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(2, 0), 1280-150, 0);
         }
         else {
-            graphics.drawImage(hub_eyes.getSubImage(3,0), 1280-150, 0);
+            graphics.drawImage(hub_eyes.getSubImage(3, 0), 1280-150, 0);
         }
-        int rhw = (int)((448-24-28)*(right.getHealth())); //actual width of red, the 24/28 are the left/right margins
-        //Health Bars here
-        graphics.drawImage(health.getSprite(0, 2),
-                RIGHT_HEALTH_BASE+24, 20,
-                RIGHT_HEALTH_BASE+24+rhw, 79+20,
-                24, 0,
-                24+rhw, 79);
+
+        //right health
+        float rho = 1280-430-150;
+        float right_health_width = 430.f-HEALTH_OUTER_MARGIN-HEALTH_INNER_MARGIN;
+        float right_health_donttake = right_health_width * (1.f - (float)right.getHealth());
+        graphics.drawImage(health.getSprite(0, 4),
+                rho+HEALTH_INNER_MARGIN+right_health_donttake, 0,
+                1280-150, 150,
+                HEALTH_INNER_MARGIN+right_health_donttake, 0,
+                430, 150,
+                health_color);
+        float right_charge_width = 430.f-CHARGE_OUTER_MARGIN-CHARGE_INNER_MARGIN;
+        float right_charge_donttake = right_charge_width * (1.f - (float)right.getCharge());
+        graphics.drawImage(health.getSprite(0, 5),
+                rho+CHARGE_INNER_MARGIN+right_charge_donttake, 0,
+                1280-150, 150,
+                CHARGE_INNER_MARGIN+right_charge_donttake, 0,
+                430, 150,
+                charge_color);
+        graphics.drawImage(health.getSprite(0, 3), rho, 0);
     }
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S);
-        p2_control = new KeyboardEntityController(right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K);
+        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V);
+        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }
