@@ -160,8 +160,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_LSHIFT, Input.KEY_S);
-        p2_control = new KeyboardEntityController(right, Input.KEY_LEFT, Input.KEY_RIGHT, Input.KEY_UP, Input.KEY_RSHIFT, Input.KEY_DOWN);
+        p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S);
+        p2_control = new KeyboardEntityController(right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }

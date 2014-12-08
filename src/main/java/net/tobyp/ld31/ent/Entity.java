@@ -199,10 +199,12 @@ public class Entity {
         }
 
         streak = 0;
+        combo = 0;
     }
 
     public void expireStreak() {
         streak = 0;
+        combo = 0;
         Log.info("Streak expired");
     }
 
