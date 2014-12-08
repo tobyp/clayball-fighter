@@ -77,12 +77,19 @@ public class StateIntro extends BasicGameState {
                 new Color(.5f, .5f, .5f));
 
         special_lights.setImageColor(1, 1, 1, 0.35f);
-        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+        graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(),
                 special_lights,
-                time * 1280.f, 0);
-        graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                ((INTRO_TIME - time) * 1280.f) % special_lights.getWidth(), 0);
+        graphics.fillRect(0, 0, gameContainer.getWidth()/2, gameContainer.getHeight(),
                 special_lights,
-                time * 720.f, 0);
+                ((INTRO_TIME - time) * 720.f)  % special_lights.getWidth(), 0);
+
+        graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                special_lights,
+                (time * 1280.f) % special_lights.getWidth(), 0);
+        graphics.fillRect(gameContainer.getWidth()/2, 0, gameContainer.getWidth(), gameContainer.getHeight(),
+                special_lights,
+                (time * 720.f) % special_lights.getWidth(), 0);
 
         Image profile = left.getProfileImage();
         profile.draw(gameContainer.getWidth()/4 - profile.getWidth()/2*scaleup - time*20, gameContainer.getHeight()/2 - profile.getHeight()/2*scaleup, scaleup);
