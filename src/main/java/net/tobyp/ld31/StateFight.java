@@ -27,6 +27,11 @@ public class StateFight extends BasicGameState implements InputListener {
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
 
+    private float special_display_time = 0;
+    private Entity special_display_entity = null;
+    private boolean special_running = false;
+    private boolean special_damage_dealt = false;
+
     private List<Projectile> projectiles = new LinkedList<Projectile>();
 
     private static final
@@ -69,6 +74,24 @@ public class StateFight extends BasicGameState implements InputListener {
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         float delta = (float)i/1000.f;
+
+        if (special_display_time > 0) {
+            if (!special_running) {
+            }
+
+            special_running = true;
+            special_display_time -= delta;
+
+            if (special_display_time <= 0) {
+                special_display_time = 0;
+                special_running = false;
+            }else
+            if (special_display_time <= 1 && !special_damage_dealt) {
+                special_damage_dealt = true;
+                Entity victim = special_display_entity == left ? right : left;
+                victim.damage(victim.getPos().withY(victim.getPos().y+0.5f), (float) (0.20 + Math.random() * 0.20));
+            }
+        }
 
         p1_control.update(delta);
         p2_control.update(delta);
@@ -203,6 +226,16 @@ public class StateFight extends BasicGameState implements InputListener {
                 430, 150,
                 charge_color);
         graphics.drawImage(health.getSprite(0, 3), rho, 0);
+
+        if (special_display_time > 1) {
+            Image flag = special_display_entity.getCharacter().getFlag();
+            graphics.drawImage(flag, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), Math.round(special_display_time*100), Math.round(special_display_time*100), flag.getWidth()-Math.round(special_display_time*100), flag.getHeight()-Math.round(special_display_time*100), new Color(.5f, .5f, .5f,  (float) (Math.abs(Math.sin(4.f * Math.PI * special_display_time)))/(special_display_time+2)));
+            return;
+        }else
+        if (special_display_time > 0) {
+            graphics.setColor(new Color(1f, 1f, 1f,  special_display_time));
+            graphics.fillRect(0, 0, gameContainer.getWidth(), gameContainer.getHeight());
+        }
     }
 
     @Override

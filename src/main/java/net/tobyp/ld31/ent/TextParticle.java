@@ -74,7 +74,8 @@ public class TextParticle {
     public void r(GameContainer gameContainer, Graphics graphics) {
         graphics.setColor(color);
         graphics.setFont(font);
-        graphics.drawString(content, (anchor.x + modifier.x) * 150, gameContainer.getHeight() + (anchor.y + modifier.y) * 150);
+        graphics.drawString(content, (anchor.x + modifier.x
+        ) * 150, gameContainer.getHeight() + (anchor.y + modifier.y) * 150);
         graphics.drawLine(anchor.x, anchor.y, anchor.x + modifier.x, anchor.y + modifier.y);
     }
 }
