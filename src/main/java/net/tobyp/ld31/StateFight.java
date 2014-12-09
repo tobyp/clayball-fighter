@@ -28,9 +28,9 @@ public class StateFight extends BasicGameState implements InputListener {
     private SpriteSheet hub_eyes;
     private Font font;
 
-    private float special_display_time = 0;
-    private Entity special_display_entity = null;
-    private boolean special_running = false;
+    public float special_display_time = 0;
+    public Entity special_display_entity = null;
+    public boolean special_running = false;
     private boolean special_damage_dealt = false;
 
     private List<Projectile> projectiles = new LinkedList<Projectile>();
@@ -243,8 +243,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V);
-        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA);
+        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V, Input.KEY_SPACE);
+        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA, Input.KEY_SPACE);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }
