@@ -8,15 +8,11 @@ import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.util.Log;
-
-import java.lang.management.BufferPoolMXBean;
-import java.util.List;
 
 /**
  * @author Tom
  */
-public class Entity {
+public class Player {
     protected static final float BOUNCE_PERIOD = .35f;
     protected static final float BOUNCE_HEIGHT = .3f; //can't be too high, as we're not actually offsetting the position (sorry)
 
@@ -46,7 +42,7 @@ public class Entity {
     public float lastdmg = 0;
     public float lastattack = 0;
 
-    public Entity(Char character, vec2 pos, boolean flipped) {
+    public Player(Char character, vec2 pos, boolean flipped) {
         this.character = character;
         this.pos = pos;
         this.flipped = flipped;
@@ -135,7 +131,7 @@ public class Entity {
     }
 
     public void slam() {
-        Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
+        Player ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
 
         vec2 distance = ent.getPos().sub(pos);
         if (Math.abs(distance.x) > 0.75f) return;
@@ -161,7 +157,7 @@ public class Entity {
 
     public void damage(vec2 source, float amount) {
         this.health = Math.max(0.f, health - amount);
-        TextParticle.add(pos.add(0.f, -0.5f), Integer.toString((int)Math.round(amount * 1000.f)), new Color(1, 0, 0, 0.7f), 0.6f);
+        TextParticle.add(pos.add(0.f, -0.5f), Integer.toString((int) Math.round(amount * 1000.f)), new Color(1, 0, 0, 0.7f), 0.6f);
         knockBack((pos.x - source.x) * (amount * 100), (pos.y - source.y) * (amount * 100));
 
         lastdmg = 3.f;
@@ -170,7 +166,7 @@ public class Entity {
     }
 
     public void melee() {
-        Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
+        Player ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
 
         animation = character.getAttackAnimation();
 
@@ -187,15 +183,6 @@ public class Entity {
         updateStreak(1);
 
         lastattack = 1.3f;
-    }
-
-    public void special() {
-        if (!stateFight.special_running && getCharge() == 1) {
-            stateFight.special_display_time = 4;
-            stateFight.special_display_entity = this;
-            expireStreak();
-            TextParticle.add(pos, "SPECIAL MOVE!", new Color(.5f, 1, .5f), 3);
-        }
     }
 
     public void knockBack(float x, float y) {

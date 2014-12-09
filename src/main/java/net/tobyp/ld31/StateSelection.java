@@ -2,12 +2,11 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.character.Char;
 import net.tobyp.ld31.control.KeyboardSelectionController;
-import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.Player;
 import net.tobyp.ld31.misc.GameSound;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.io.IOException;
@@ -141,8 +140,8 @@ public class StateSelection extends BasicGameState {
             Char left_char = characters[left.getSelectionIndex()];
             Char right_char = characters[right.getSelectionIndex()];
 
-            Entity left_ent = new Entity(left_char, new vec2(-2.5f, 0.f), false);
-            Entity right_ent = new Entity(right_char, new vec2(2.5f, 0.f), true);
+            Player left_ent = new Player(left_char, new vec2(-2.5f, 0.f), false);
+            Player right_ent = new Player(right_char, new vec2(2.5f, 0.f), true);
 
             intro_state.setCharacters(left_char, right_char);
             fight_state.setArena(arenae[arena_index]);

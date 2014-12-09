@@ -1,11 +1,8 @@
 package net.tobyp.ld31.control;
 
 import net.tobyp.ld31.StateFight;
-import net.tobyp.ld31.ent.Entity;
-import net.tobyp.ld31.ent.Projectile;
-import net.tobyp.ld31.ent.TextParticle;
+import net.tobyp.ld31.ent.Player;
 import net.tobyp.ld31.misc.vec2;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
@@ -13,7 +10,7 @@ import org.newdawn.slick.KeyListener;
  * Created by tobyp on 12/7/14.
  */
 public class KeyboardEntityController implements KeyListener {
-    private Entity entity;
+    private Player player;
     private StateFight fight;
     private int key_left;
     private int key_right;
@@ -21,42 +18,40 @@ public class KeyboardEntityController implements KeyListener {
     private int key_attack;
     private int key_crouch;
     private int key_projectile;
-    private int key_special;
     private float direction = 0.f;
 
     private int keysdown = 0;
 
-    public KeyboardEntityController(StateFight fight, Entity entity, int key_left, int key_right, int key_jump, int key_attack, int key_crouch, int key_projectile, int key_special) {
+    public KeyboardEntityController(StateFight fight, Player player, int key_left, int key_right, int key_jump, int key_attack, int key_crouch, int key_projectile) {
         this.fight = fight;
-        this.entity = entity;
+        this.player = player;
         this.key_left = key_left;
         this.key_right = key_right;
         this.key_jump = key_jump;
         this.key_attack = key_attack;
         this.key_crouch = key_crouch;
         this.key_projectile = key_projectile;
-        this.key_special = key_special;
     }
 
 
     public void update(float delta) {
-        if (entity.locked > 0) {
-            entity.locked -= delta;
+        if (player.locked > 0) {
+            player.locked -= delta;
             return;
         }
 
-        if (direction == 0.f && Math.abs(entity.getVel().x) < 0.05f) {
-            entity.changeVel(new vec2(-entity.getVel().x, 0.f));
-        } else if (entity.getVel().x < direction * entity.getCharacter().getSpeed()) {
-            entity.changeVel(new vec2(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta, 0.f));
-        } else if (entity.getVel().x > direction * entity.getCharacter().getSpeed()) {
-            entity.changeVel(new vec2(-(entity.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta), 0.f));
+        if (direction == 0.f && Math.abs(player.getVel().x) < 0.05f) {
+            player.changeVel(new vec2(-player.getVel().x, 0.f));
+        } else if (player.getVel().x < direction * player.getCharacter().getSpeed()) {
+            player.changeVel(new vec2(player.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta, 0.f));
+        } else if (player.getVel().x > direction * player.getCharacter().getSpeed()) {
+            player.changeVel(new vec2(-(player.getCharacter().getSpeed() * (1 + Math.abs(direction)) * 4.f * delta), 0.f));
         }
 
         if (direction > 0) {
-            entity.setFlipped(false);
+            player.setFlipped(false);
         } else if (direction < 0) {
-            entity.setFlipped(true);
+            player.setFlipped(true);
         }
     }
 
@@ -69,23 +64,20 @@ public class KeyboardEntityController implements KeyListener {
             direction += 1.f;
             keysdown++;
         } else if (c == this.key_jump) {
-            entity.jump();
+            player.jump();
             keysdown++;
         } else if (c == this.key_attack) {
-            entity.melee();
+            player.melee();
             keysdown++;
         } else if (c == this.key_crouch) {
-            entity.crouch();
-            keysdown++;
-        } else if (c == this.key_special) {
-            entity.special();
+            player.crouch();
             keysdown++;
         }
         else if (c == this.key_projectile) {
-            fight.addProjectile(entity);
+            fight.addProjectile(player);
             keysdown++;
         }
-        entity.setBounce(direction != 0.f);
+        player.setBounce(direction != 0.f);
     }
 
     @Override
@@ -103,12 +95,11 @@ public class KeyboardEntityController implements KeyListener {
             keysdown--;
         } else if (c == this.key_crouch) {
             keysdown--;
-        } else if (c == this.key_projectile) {
-            keysdown--;
-        } else if (c == this.key_special) {
+        }
+        else if (c == this.key_projectile) {
             keysdown--;
         }
-        entity.setBounce(direction != 0.f);
+        player.setBounce(direction != 0.f);
     }
 
     @Override

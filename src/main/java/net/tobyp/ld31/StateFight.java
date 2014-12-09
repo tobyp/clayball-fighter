@@ -1,7 +1,7 @@
 package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
-import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.Player;
 import net.tobyp.ld31.ent.TextParticle;
 import net.tobyp.ld31.ent.Projectile;
 import net.tobyp.ld31.misc.vec2;
@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class StateFight extends BasicGameState implements InputListener {
     private Arena arena;
-    private Entity left;
-    private Entity right;
+    private Player left;
+    private Player right;
     KeyboardEntityController p1_control;
     KeyboardEntityController p2_control;
 
@@ -29,9 +29,9 @@ public class StateFight extends BasicGameState implements InputListener {
     private Image space;
     private Font font;
 
-    public float special_display_time = 0;
-    public Entity special_display_entity = null;
-    public boolean special_running = false;
+    private float special_display_time = 0;
+    private Player special_display_player = null;
+    private boolean special_running = false;
     private boolean special_damage_dealt = false;
 
     private float chargeblink_time = 0.f;
@@ -58,7 +58,7 @@ public class StateFight extends BasicGameState implements InputListener {
         this.outro_state = state_outro;
     }
 
-    public void addProjectile(Entity e) {
+    public void addProjectile(Player e) {
         Projectile p = new Projectile(e == left ? right : left, e, e.getPos(), e.getVel().add(e.getFlipped() ? -PROJECTILE_SPEED : PROJECTILE_SPEED, PROJECTILE_LIFT), e.getCharacter().getProjectileAnimation());
         projectiles.add(p);
     }
@@ -92,7 +92,7 @@ public class StateFight extends BasicGameState implements InputListener {
             }else
             if (special_display_time <= 1 && !special_damage_dealt) {
                 special_damage_dealt = true;
-                Entity victim = special_display_entity == left ? right : left;
+                Player victim = special_display_player == left ? right : left;
                 victim.damage(victim.getPos().withY(victim.getPos().y+0.5f), (float) (0.20 + Math.random() * 0.20));
             }
         }
@@ -255,7 +255,7 @@ public class StateFight extends BasicGameState implements InputListener {
         }
 
         if (special_display_time > 1) {
-            Image flag = special_display_entity.getCharacter().getFlag();
+            Image flag = special_display_player.getCharacter().getFlag();
             graphics.drawImage(flag, 0, 0, gameContainer.getWidth(), gameContainer.getHeight(), Math.round(special_display_time*100), Math.round(special_display_time*100), flag.getWidth()-Math.round(special_display_time*100), flag.getHeight()-Math.round(special_display_time*100), new Color(.5f, .5f, .5f,  (float) (Math.abs(Math.sin(4.f * Math.PI * special_display_time)))/(special_display_time+2)));
             return;
         }else
@@ -267,8 +267,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V, Input.KEY_SPACE);
-        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA, Input.KEY_SPACE);
+        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V);
+        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }
@@ -279,17 +279,17 @@ public class StateFight extends BasicGameState implements InputListener {
         gameContainer.getInput().removeKeyListener(p2_control);
     }
 
-    public void setEntities(Entity left, Entity right) {
+    public void setEntities(Player left, Player right) {
         this.left = left;
         this.right = right;
     }
 
-    public Entity getLeft() {
+    public Player getLeft() {
         return left;
     }
 
 
-    public Entity getRight() {
+    public Player getRight() {
         return right;
     }
 
