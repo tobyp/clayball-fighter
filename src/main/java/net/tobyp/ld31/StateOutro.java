@@ -66,7 +66,7 @@ public class StateOutro extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        float scale = (float)Math.sin(time * 2.f * Math.PI / OUTRO_TIME) + .5f / 2.f; //oscillate 1 time between 0 and 1
+        float scale = (float)Math.abs(Math.sin(time * 2.f * Math.PI / OUTRO_TIME)) + .5f / 2.f; //oscillate 1 time between 0 and 1
 
         graphics.drawImage(flag,
                 0, 0, flag.getWidth(), flag.getHeight(),

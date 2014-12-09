@@ -20,11 +20,15 @@ public class Entity {
     protected static final float BOUNCE_PERIOD = .35f;
     protected static final float BOUNCE_HEIGHT = .3f; //can't be too high, as we're not actually offsetting the position (sorry)
 
+    protected static final float DAMAGE_BASE = 0.005f;
+    protected static final float DAMAGE_VAR = 0.015f;
+    protected static final float CHARGE_BASE = 0.0025f;
+    protected static final float CHARGE_VAR = 0.0035f;
+
     protected vec2 pos; //defined such that y=0 is the baseline (center of a ball when it's touching the ground), x=0 is the center, and the unit is round about the diameter of a polandball
     protected vec2 vel = new vec2(0.f, 0.f);
     protected Char character;
     protected double health = 1; // 0 to 1
-    protected double charge = 1; //0 to 1
     protected boolean flipped;
     protected Animation animation;
     protected Animation base_animation;
@@ -37,7 +41,6 @@ public class Entity {
     protected boolean slam = false;
 
     protected int streak = 0;
-    protected int combo = 0;
 
     public float locked = 0;
     public float lastdmg = 0;
@@ -135,10 +138,11 @@ public class Entity {
         Entity ent = this == stateFight.getLeft() ? stateFight.getRight() : stateFight.getLeft();
 
         vec2 distance = ent.getPos().sub(pos);
-        if (Math.abs(distance.x) > 1.5f) return;
-        if (Math.abs(distance.y) > 1.2f) return;
+        if (Math.abs(distance.x) > 0.75f) return;
+        if (Math.abs(distance.y) > 1.25f) return;
 
         ent.damage(pos, (float) (Math.random() * 0.05) +0.04f);
+        TextParticle.add(pos.add(0.f, -0.5f), "SLAM!", new Color(.45f, .05f, .05f, 0.7f), 1.3f);
 
         vel = new vec2(0, 0);
         locked = 1.5f;
@@ -153,12 +157,11 @@ public class Entity {
             bounce_time = 0.f;
             GameSound.JUMP.play(1, 1);
         }
-
-        TextParticle.add(pos, "Hi!", new Color(1, 0, 0), 2.f);
     }
 
     public void damage(vec2 source, float amount) {
         this.health = Math.max(0.f, health - amount);
+        TextParticle.add(pos.add(0.f, -0.5f), Double.toString(Math.round(amount * 100.f)), new Color(1, 0, 0, 0.7f), 0.6f);
         knockBack((pos.x - source.x) * (amount * 100), (pos.y - source.y) * (amount * 100));
 
         lastdmg = 3.f;
@@ -177,9 +180,10 @@ public class Entity {
         if (Math.abs(distance.x) > 1.5f) return;
         if (Math.abs(distance.y) > 0.5f) return;
 
-        GameSound.MELEE.play(1, 1);
-        ent.damage(pos, (float) (Math.random() * 0.05) + 0.02f);
+        double damage = DAMAGE_BASE + CHARGE_BASE*getCharge() + (DAMAGE_VAR + CHARGE_VAR*getCharge())*Math.random();
+        ent.damage(pos, (float)damage);
 
+        GameSound.MELEE.play(1, 1);
         updateStreak(1);
 
         lastattack = 1.3f;
@@ -192,27 +196,23 @@ public class Entity {
     public void updateStreak(int update) {
         int newstreak = streak + update;
 
-        if (newstreak >= 3) {
-            combo = newstreak;
-            Log.info("STREAK " + newstreak);
+        if (newstreak >= 3 && newstreak <= 10) {
+            TextParticle.add(pos.add(0.f, -0.5f), "COMBO", new Color(.21f, .76f, .78f, 0.8f), 0.9f);
         }
 
         streak = newstreak;
     }
 
     public void resetStreak() {
-        if (combo > 0) {
-            Log.info("C-C-COMBO BREAKERRR");
+        if (streak >= 3) {
+            TextParticle.add(pos.add(0.f, -0.5f), "C-C-COMBO BREAKER", new Color(1.f, .73f, 0.16f, 0.95f), 1.3f);
         }
 
         streak = 0;
-        combo = 0;
     }
 
     public void expireStreak() {
         streak = 0;
-        combo = 0;
-        Log.info("Streak expired");
     }
 
     public void setBounce(boolean bounce) {
@@ -248,6 +248,8 @@ public class Entity {
     }
 
     public double getCharge() {
-        return charge;
+        if (streak < 3) return 0.0;
+        if (streak > 9) return 1.0;
+        return (streak - 2) * 1.0/7.0;
     }
 }

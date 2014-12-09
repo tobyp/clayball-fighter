@@ -54,14 +54,13 @@ public class TextParticle {
         float progress = time/end;
         modifier = new vec2(0.f, -progress);
         color.a = 1.f-progress;
-
-        System.out.println(progress);
     }
 
     public void r(GameContainer gameContainer, Graphics graphics, Font font) {
         graphics.setColor(color);
         graphics.setFont(font);
-        graphics.drawString(content, (anchor.x + modifier.x) * 150 + gameContainer.getWidth() * 0.5f, (anchor.y + modifier.y) * 150 + gameContainer.getHeight() * 0.8f);
-        graphics.drawLine(anchor.x, anchor.y, anchor.x + modifier.x, anchor.y + modifier.y);
+        float strwidth = font.getWidth(content);
+        graphics.drawString(content, (anchor.x + modifier.x) * 150 + gameContainer.getWidth() * 0.5f - strwidth / 2.f, (anchor.y + modifier.y) * 150 + gameContainer.getHeight() * 0.8f);
+       // graphics.drawLine(anchor.x, anchor.y, anchor.x + modifier.x, anchor.y + modifier.y);
     }
 }
