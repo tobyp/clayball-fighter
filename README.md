@@ -7,15 +7,16 @@ Clayball Fighter, based on the original Polandball comics (http://www.reddit.com
 
 ## Features
 
-- Play as United States, United Kingdom, or Sweden
+- Play as China, Sweden, United Kingdom, or United States
 - US (Western) and SE (IBÖRKA, the furniture retailer) Arenas
-- Bounce, jump, double jump, and standard attack (with randomized damage)
+- Bounce, jump, double jump, slam, standard attack, projectile attack, and special attack
 - Stereotypical intro and outro screens
 
 ## Controls
 
-- Left: WASD for movement, Left CTRL to choose/attack
-- Right: Arrow keys for movement, Right CTRL to choose/attack
+- Left: `WASD` for movement, `C` to choose/attack, `V` for projectile
+- Right: `IJKL` for movement, `.` to choose/attack, `,` for projectiles
+- Both: `Space` for special attack when a charge bar is full (only one of these can be full at a time)
 
 ## Wishlist
 
