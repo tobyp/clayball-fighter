@@ -13,8 +13,6 @@ import java.util.List;
  */
 public class TextParticle {
 
-    private static Font font = null;
-
     public static List<TextParticle> list = new ArrayList<>();
     public static void add(vec2 pos, String content, Color color, float end) {
         list.add(new TextParticle(pos, content, color, end));
@@ -26,12 +24,11 @@ public class TextParticle {
         }
     }
 
-    public static void render(GameContainer gameContainer, Graphics graphics) {
+    public static void render(GameContainer gameContainer, Graphics graphics, Font font) {
         for (TextParticle t : new ArrayList<>(list)) {
-            t.r(gameContainer, graphics);
+            t.r(gameContainer, graphics, font);
         }
     }
-
 
     protected vec2 anchor;
     protected vec2 modifier;
@@ -41,16 +38,6 @@ public class TextParticle {
     protected float time = 0;
 
     private TextParticle(vec2 pos, String content, Color color, float end) {
-        if (font == null) {
-            try {
-                font = new SpriteSheetFont(new SpriteSheet(Ld31.class.getResource("/fonts/scribble.png"), 30, 42), ' ');
-            }catch (IOException e) {
-                e.printStackTrace();
-            }catch (SlickException e) {
-                e.printStackTrace();
-            }
-        }
-
         this.anchor = pos;
         this.content = content;
         this.color = color;
@@ -64,17 +51,17 @@ public class TextParticle {
             list.remove(this);
         }
 
-        float progress = (time/end);
-        modifier = new vec2(0, -progress);
-        color.a = 1-progress;
+        float progress = time/end;
+        modifier = new vec2(0.f, -progress);
+        color.a = 1.f-progress;
 
         System.out.println(progress);
     }
 
-    public void r(GameContainer gameContainer, Graphics graphics) {
+    public void r(GameContainer gameContainer, Graphics graphics, Font font) {
         graphics.setColor(color);
         graphics.setFont(font);
-        graphics.drawString(content, (anchor.x + modifier.x) * 150, gameContainer.getHeight() + (anchor.y + modifier.y) * 150);
+        graphics.drawString(content, (anchor.x + modifier.x) * 150 + gameContainer.getWidth() * 0.5f, (anchor.y + modifier.y) * 150 + gameContainer.getHeight() * 0.8f);
         graphics.drawLine(anchor.x, anchor.y, anchor.x + modifier.x, anchor.y + modifier.y);
     }
 }
