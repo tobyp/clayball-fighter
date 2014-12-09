@@ -1,6 +1,8 @@
 package net.tobyp.ld31.control;
 
+import net.tobyp.ld31.StateFight;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.Projectile;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
@@ -10,22 +12,26 @@ import org.newdawn.slick.KeyListener;
  */
 public class KeyboardEntityController implements KeyListener {
     private Entity entity;
+    private StateFight fight;
     private int key_left;
     private int key_right;
     private int key_jump;
     private int key_attack;
     private int key_crouch;
+    private int key_projectile;
     private float direction = 0.f;
 
     private int keysdown = 0;
 
-    public KeyboardEntityController(Entity entity, int key_left, int key_right, int key_jump, int key_attack, int key_crouch) {
+    public KeyboardEntityController(StateFight fight, Entity entity, int key_left, int key_right, int key_jump, int key_attack, int key_crouch, int key_projectile) {
+        this.fight = fight;
         this.entity = entity;
         this.key_left = key_left;
         this.key_right = key_right;
         this.key_jump = key_jump;
         this.key_attack = key_attack;
         this.key_crouch = key_crouch;
+        this.key_projectile = key_projectile;
     }
 
 
@@ -68,6 +74,10 @@ public class KeyboardEntityController implements KeyListener {
             entity.crouch();
             keysdown++;
         }
+        else if (c == this.key_projectile) {
+            fight.addProjectile(entity);
+            keysdown++;
+        }
         entity.setBounce(direction != 0.f);
     }
 
@@ -85,6 +95,9 @@ public class KeyboardEntityController implements KeyListener {
         } else if (c == this.key_attack) {
             keysdown--;
         } else if (c == this.key_crouch) {
+            keysdown--;
+        }
+        else if (c == this.key_projectile) {
             keysdown--;
         }
         entity.setBounce(direction != 0.f);

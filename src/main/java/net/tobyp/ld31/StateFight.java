@@ -2,12 +2,16 @@ package net.tobyp.ld31;
 
 import net.tobyp.ld31.control.KeyboardEntityController;
 import net.tobyp.ld31.ent.Entity;
+import net.tobyp.ld31.ent.Projectile;
 import net.tobyp.ld31.misc.vec2;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by tobyp on 12/6/14.
@@ -22,7 +26,11 @@ public class StateFight extends BasicGameState implements InputListener {
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
 
-    private static final float HEALTH_INNER_MARGIN = 17;
+    private List<Projectile> projectiles = new LinkedList<Projectile>();
+
+    private static final
+
+    float HEALTH_INNER_MARGIN = 17;
     private static final float HEALTH_OUTER_MARGIN = 67;
     private static final float CHARGE_INNER_MARGIN = 23;
     private static final float CHARGE_OUTER_MARGIN = 77;
@@ -33,10 +41,18 @@ public class StateFight extends BasicGameState implements InputListener {
     private static final float HAPPY_THRESH = 0.7f;
     private static final float SAD_THRESH = 0.4f;
 
+    private static final float PROJECTILE_SPEED = 12.f;
+    private static final float PROJECTILE_LIFT = -1.f;
+
     private StateOutro outro_state;
 
     public StateFight(StateOutro state_outro) {
         this.outro_state = state_outro;
+    }
+
+    public void addProjectile(Entity e) {
+        Projectile p = new Projectile(e == left ? right : left, e.getPos(), e.getVel().add(e.getFlipped() ? -PROJECTILE_SPEED : PROJECTILE_SPEED, PROJECTILE_LIFT), e.getCharacter().getProjectileAnimation());
+        projectiles.add(p);
     }
 
     @Override
@@ -58,6 +74,12 @@ public class StateFight extends BasicGameState implements InputListener {
 
         left.update(delta, this);
         right.update(delta, this);
+
+        Iterator<Projectile> it = projectiles.iterator();
+        while (it.hasNext()) {
+            Projectile p = it.next();
+            if (!p.update(delta)) it.remove();
+        }
 
         //Collisions
         vec2 sep = right.getPos().sub(left.getPos());
@@ -100,6 +122,10 @@ public class StateFight extends BasicGameState implements InputListener {
 
         left.render(graphics);
         right.render(graphics);
+
+        for (Projectile p : projectiles) {
+            p.render(graphics);
+        }
 
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
@@ -176,8 +202,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S);
-        p2_control = new KeyboardEntityController(right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K);
+        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V);
+        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }

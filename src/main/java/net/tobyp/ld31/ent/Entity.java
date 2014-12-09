@@ -119,6 +119,10 @@ public class Entity {
         this.flipped = flipped;
     }
 
+    public boolean getFlipped() {
+        return flipped;
+    }
+
     public void crouch() {
         if (jumps > 0 && !slam) {
             slam = true;
