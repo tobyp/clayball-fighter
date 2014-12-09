@@ -26,6 +26,7 @@ public class StateFight extends BasicGameState implements InputListener {
 
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
+    private Font font;
 
     private float special_display_time = 0;
     private Entity special_display_entity = null;
@@ -66,6 +67,7 @@ public class StateFight extends BasicGameState implements InputListener {
         try {
             health = new SpriteSheet(Ld31.class.getResource("/bar.png"), 430, 150);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
+            font = new SpriteSheetFont(new SpriteSheet(Ld31.class.getResource("/fonts/scribble.png"), 30, 42), ' ');
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,7 +158,8 @@ public class StateFight extends BasicGameState implements InputListener {
         graphics.popTransform();
         //PIXEL SCREEN SPACE (1 unit is one pixel, origin is top left)
 
-        TextParticle.render(gameContainer, graphics);
+        TextParticle.render(gameContainer, graphics, font);
+
 
         //left profile
         graphics.drawImage(left.getCharacter().getProfileImage(), 0, 0);

@@ -25,6 +25,10 @@ public class Arena {
         return center;
     }
 
+    public float getBallWidth() {
+        return ball_width;
+    }
+
     private float ground; //0.0 is top, 1.0 is bottom of image
 
     public Arena(String name, Image background, float ball_width, float ground, float center, float left_boundary, float right_boundary) {

@@ -16,6 +16,9 @@ public class Projectile {
     private Entity victim; //for multiplayer this would be a list
     private Animation anim;
 
+    private static final float DAMAGE_BASE = 0.005f;
+    private static final float DAMAGE_VAR = 0.02f;
+
     public Projectile(Entity victim, Entity thrower, vec2 pos, vec2 vel, Animation animation) {
         this.pos = pos;
         this.vel = vel;
@@ -31,8 +34,9 @@ public class Projectile {
 
         if (victim.getPos().getDistance(pos) < .5f) { //.f = half the victim
             thrower.updateStreak(1);
-            thrower.lastattack = 1.3f;
-            victim.damage(pos, (float) (Math.random() * 0.05) +0.04f);
+            double damage = DAMAGE_BASE + DAMAGE_VAR*Math.random();
+            thrower.lastattack = (float)damage;
+            victim.damage(pos, (float)damage);
             return false;
         }
 
