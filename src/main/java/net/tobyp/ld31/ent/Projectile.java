@@ -16,8 +16,8 @@ public class Projectile {
     private Entity victim; //for multiplayer this would be a list
     private Animation anim;
 
-    private static final float DAMAGE_BASE = 0.02f;
-    private static final float DAMAGE_VAR = 0.03f;
+    private static final float DAMAGE_BASE = 0.005f;
+    private static final float DAMAGE_VAR = 0.02f;
 
     public Projectile(Entity victim, Entity thrower, vec2 pos, vec2 vel, Animation animation) {
         this.pos = pos;

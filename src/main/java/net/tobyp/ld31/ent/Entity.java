@@ -161,7 +161,7 @@ public class Entity {
 
     public void damage(vec2 source, float amount) {
         this.health = Math.max(0.f, health - amount);
-        TextParticle.add(pos.add(0.f, -0.5f), Double.toString(Math.round(amount * 100.f)), new Color(1, 0, 0, 0.7f), 0.6f);
+        TextParticle.add(pos.add(0.f, -0.5f), Integer.toString((int)Math.round(amount * 1000.f)), new Color(1, 0, 0, 0.7f), 0.6f);
         knockBack((pos.x - source.x) * (amount * 100), (pos.y - source.y) * (amount * 100));
 
         lastdmg = 3.f;
