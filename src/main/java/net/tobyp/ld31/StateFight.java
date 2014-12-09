@@ -53,7 +53,7 @@ public class StateFight extends BasicGameState implements InputListener {
     }
 
     public void addProjectile(Entity e) {
-        Projectile p = new Projectile(e == left ? right : left, e.getPos(), e.getVel().add(e.getFlipped() ? -PROJECTILE_SPEED : PROJECTILE_SPEED, PROJECTILE_LIFT), e.getCharacter().getProjectileAnimation());
+        Projectile p = new Projectile(e == left ? right : left, e, e.getPos(), e.getVel().add(e.getFlipped() ? -PROJECTILE_SPEED : PROJECTILE_SPEED, PROJECTILE_LIFT), e.getCharacter().getProjectileAnimation());
         projectiles.add(p);
     }
 

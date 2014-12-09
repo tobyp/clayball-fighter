@@ -12,13 +12,15 @@ public class Projectile {
     private static final vec2 GRAVITY = new vec2(0.f, 6.125f); //half gravity, would usually be 12.5f
     private vec2 pos;
     private vec2 vel;
+    private Entity thrower;
     private Entity victim; //for multiplayer this would be a list
     private Animation anim;
 
-    public Projectile(Entity victim, vec2 pos, vec2 vel, Animation animation) {
+    public Projectile(Entity victim, Entity thrower, vec2 pos, vec2 vel, Animation animation) {
         this.pos = pos;
         this.vel = vel;
         this.victim = victim;
+        this.thrower = thrower;
         this.anim = animation;
     }
 
@@ -28,6 +30,8 @@ public class Projectile {
         anim.update(delta);
 
         if (victim.getPos().getDistance(pos) < .5f) { //.f = half the victim
+            thrower.updateStreak(1);
+            thrower.lastattack = 1.3f;
             victim.damage(pos, (float) (Math.random() * 0.05) +0.04f);
             return false;
         }

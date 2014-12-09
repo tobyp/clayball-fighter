@@ -182,7 +182,7 @@ public class Entity {
 
         updateStreak(1);
 
-        lastattack = 3.f;
+        lastattack = 1.3f;
     }
 
     public void knockBack(float x, float y) {
