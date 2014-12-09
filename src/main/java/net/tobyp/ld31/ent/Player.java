@@ -185,6 +185,15 @@ public class Player {
         lastattack = 1.3f;
     }
 
+    public void special() {
+        if (!stateFight.special_running && getCharge() == 1) {
+            stateFight.special_display_time = 4;
+            stateFight.special_display_player = this;
+            expireStreak();
+            TextParticle.add(pos, "SPECIAL MOVE!", new Color(.5f, 1, .5f), 3);
+        }
+    }
+
     public void knockBack(float x, float y) {
         vel = vel.withX(x).add(0, x / 3 + y);
     }

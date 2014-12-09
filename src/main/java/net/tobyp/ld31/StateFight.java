@@ -29,9 +29,9 @@ public class StateFight extends BasicGameState implements InputListener {
     private Image space;
     private Font font;
 
-    private float special_display_time = 0;
-    private Player special_display_player = null;
-    private boolean special_running = false;
+    public float special_display_time = 0;
+    public Player special_display_player = null;
+    public boolean special_running = false;
     private boolean special_damage_dealt = false;
 
     private float chargeblink_time = 0.f;
@@ -93,7 +93,7 @@ public class StateFight extends BasicGameState implements InputListener {
             if (special_display_time <= 1 && !special_damage_dealt) {
                 special_damage_dealt = true;
                 Player victim = special_display_player == left ? right : left;
-                victim.damage(victim.getPos().withY(victim.getPos().y+0.5f), (float) (0.20 + Math.random() * 0.20));
+                victim.damage(victim.getPos().withY(victim.getPos().y+0.5f), (float) (0.40 + Math.random() * 0.20));
             }
         }
 
@@ -267,8 +267,8 @@ public class StateFight extends BasicGameState implements InputListener {
 
     @Override
     public void enter(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V);
-        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA);
+        p1_control = new KeyboardEntityController(this, left, Input.KEY_A, Input.KEY_D, Input.KEY_W, Input.KEY_C, Input.KEY_S, Input.KEY_V, Input.KEY_SPACE);
+        p2_control = new KeyboardEntityController(this, right, Input.KEY_J, Input.KEY_L, Input.KEY_I, Input.KEY_PERIOD, Input.KEY_K, Input.KEY_COMMA, Input.KEY_SPACE);
         gameContainer.getInput().addKeyListener(p1_control);
         gameContainer.getInput().addKeyListener(p2_control);
     }
