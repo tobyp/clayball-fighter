@@ -26,6 +26,7 @@ public class StateFight extends BasicGameState implements InputListener {
 
     private SpriteSheet health;
     private SpriteSheet hub_eyes;
+    private Image space;
     private Font font;
 
     private float special_display_time = 0;
@@ -33,11 +34,11 @@ public class StateFight extends BasicGameState implements InputListener {
     private boolean special_running = false;
     private boolean special_damage_dealt = false;
 
+    private float chargeblink_time = 0.f;
+
     private List<Projectile> projectiles = new LinkedList<Projectile>();
 
-    private static final
-
-    float HEALTH_INNER_MARGIN = 17;
+    private static final float HEALTH_INNER_MARGIN = 17;
     private static final float HEALTH_OUTER_MARGIN = 67;
     private static final float CHARGE_INNER_MARGIN = 23;
     private static final float CHARGE_OUTER_MARGIN = 77;
@@ -68,6 +69,7 @@ public class StateFight extends BasicGameState implements InputListener {
             health = new SpriteSheet(Ld31.class.getResource("/bar.png"), 430, 150);
             hub_eyes = new SpriteSheet(Ld31.class.getResource("/hub_eyes.png"), 150, 150);
             font = new SpriteSheetFont(new SpriteSheet(Ld31.class.getResource("/fonts/scribble.png"), 30, 42), ' ');
+            space = new Image(Ld31.class.getResourceAsStream("/space.png"), "space", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,6 +96,8 @@ public class StateFight extends BasicGameState implements InputListener {
                 victim.damage(victim.getPos().withY(victim.getPos().y+0.5f), (float) (0.20 + Math.random() * 0.20));
             }
         }
+
+        chargeblink_time += delta;
 
         p1_control.update(delta);
         p2_control.update(delta);
@@ -195,6 +199,16 @@ public class StateFight extends BasicGameState implements InputListener {
                 charge_color);
         graphics.drawImage(health.getSprite(0, 0), 150, 0);
 
+        //left space
+        if (left.getCharge() >= 1.0) {
+            graphics.drawImage(space,
+                    150+75, 50,
+                    150+75+250, 100,
+                    0, 0,
+                    250, 50,
+                    new Color(1.f, 1.f, 1.f, (float)Math.abs(Math.sin(2.f * Math.PI * chargeblink_time))));
+        }
+
         //right profile
         graphics.drawImage(right.getCharacter().getProfileImage(), 1280-150, 0);
         if (right.getHealth() >= HAPPY_THRESH) {
@@ -229,6 +243,16 @@ public class StateFight extends BasicGameState implements InputListener {
                 430, 150,
                 charge_color);
         graphics.drawImage(health.getSprite(0, 3), rho, 0);
+
+        //right space
+        if (right.getCharge() >= 1.0) {
+            graphics.drawImage(space,
+                    1280-150-75-250, 50,
+                    1280-150-75, 100,
+                    0, 0,
+                    250, 50,
+                    new Color(1.f, 1.f, 1.f, (float)Math.abs(Math.sin(2.f * Math.PI * chargeblink_time))));
+        }
 
         if (special_display_time > 1) {
             Image flag = special_display_entity.getCharacter().getFlag();

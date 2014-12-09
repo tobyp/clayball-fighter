@@ -36,6 +36,7 @@ public class Projectile {
             thrower.updateStreak(1);
             double damage = DAMAGE_BASE + DAMAGE_VAR*Math.random();
             thrower.lastattack = (float)damage;
+            thrower.updateStreak(1);
             victim.damage(pos, (float)damage);
             return false;
         }
